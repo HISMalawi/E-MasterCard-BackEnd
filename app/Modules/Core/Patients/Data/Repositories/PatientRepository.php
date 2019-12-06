@@ -94,7 +94,7 @@ class PatientRepository {
                 $chadata =Patient::orderBy('date_created', 'desc')
                 ->orWhereHas('person', function ($query) use ($searchParameter){
                     $query->whereHas('names', function ($query) use ($searchParameter){
-                        $query->where('given_name', 'like', '%'. $searchParameter . '%');
+                        $query->where('given_name', 'like', $searchParameter . '%');
                     });
                 })->distinct()->get();
 
@@ -104,8 +104,8 @@ class PatientRepository {
                 $chadata =Patient::orderBy('date_created', 'desc')
                 ->orWhereHas('person', function ($query) use ($searchParameterb){
                     $query->whereHas('names', function ($query) use ($searchParameterb){
-                        $query->where('given_name', '=', $searchParameterb[0] )
-                            ->Where('family_name', '=', $searchParameterb[1] );
+                        $query->where('given_name', 'like', $searchParameterb[0].'%' )
+                            ->Where('family_name', 'like', $searchParameterb[1].'%' );
                     });
                 })->distinct()->get();
 
@@ -115,9 +115,9 @@ class PatientRepository {
                 $chadata =Patient::orderBy('date_created', 'desc')
                 ->orWhereHas('person', function ($query) use ($searchParameterb){
                     $query->whereHas('names', function ($query) use ($searchParameterb){
-                        $query->where('given_name', '=', $searchParameterb[0])
-                            ->Where('middle_name', '=', $searchParameterb[1])
-                            ->Where('family_name', '=',  $searchParameterb[2]);
+                        $query->where('given_name', 'like', $searchParameterb[0].'%')
+                            ->Where('middle_name', 'like', $searchParameterb[1].'%')
+                            ->Where('family_name', 'like',  $searchParameterb[2].'%');
                     });
                 })->distinct()->get();
 

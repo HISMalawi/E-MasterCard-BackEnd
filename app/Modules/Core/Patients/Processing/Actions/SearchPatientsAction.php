@@ -12,6 +12,7 @@ class SearchPatientsAction
     {
         $patients = App::make(PatientRepository::class)->search($data['search']);
 
+
         return $patients;
     }
 }

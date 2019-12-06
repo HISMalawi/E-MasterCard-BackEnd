@@ -42,6 +42,8 @@ class PatientAPIController extends  Controller
     public function search(SearchPatientsRequest $request)
     {
         $patients = App::make(SearchPatientsAction::class)->run($request->all());
+        //die('Trave');
+
 
         return PatientResource::collection($patients);
     }

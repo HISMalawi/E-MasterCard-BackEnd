@@ -12,7 +12,7 @@ class GetTxCurrentDisAggReportSubAction
 {
     public function run($reportDate)
     {
-        dd('1');
+        //dd('1');
         $parsedReportDate = Carbon::parse($reportDate);
         ### STILL UNDER WORKS TO SORT BY VISIT DATE ######
         $lastVisitEncounterIDs = App::make(GetLastVisitEncounterTask::class)->run3();

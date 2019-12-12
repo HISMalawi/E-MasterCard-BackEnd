@@ -126,8 +126,10 @@ class ReportAPIController extends Controller
             'reportStartDate' => $request->reportStartDate,
             'reportEndDate' => $request->reportEndDate
         ];
+        //die($data);
 
         $report = App::make(GetDisaggregatedReportAction::class)->run($data);
+        //die($report);
 
         return response()->json(
             [

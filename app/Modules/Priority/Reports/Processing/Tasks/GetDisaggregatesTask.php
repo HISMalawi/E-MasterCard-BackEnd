@@ -214,6 +214,20 @@ class GetDisaggregatesTask
             ];
         }
 
+        //Correcting totals of adults
+        $adulttotals = $this->calculategrouptotal($payload['adults']);
+        $payload['adults']['males']['count'] = $adulttotals['males'];
+        $payload['adults']['females']['count'] = $adulttotals['females'];
+        $payload['adults']['count'] = $payload['adults']['males']['count'] + $payload['adults']['females']['count'] ;
+        
+        //Correcting totals of peds      
+        $pedstotals = $this->calculategrouptotal($payload['pediatrics']);;
+        $payload['pediatrics']['males']['count'] = $pedstotals['males'];
+        $payload['pediatrics']['females']['count'] = $pedstotals['females'];
+        $payload['pediatrics']['count'] = $payload['pediatrics']['males']['count'] + $payload['pediatrics']['females']['count'] ;
+        
+        $payload['total'] = $payload['adults']['count'] + $payload['pediatrics']['count'];
+
         return $payload;
     }
 

@@ -126,10 +126,11 @@ class ReportAPIController extends Controller
             'reportStartDate' => $request->reportStartDate,
             'reportEndDate' => $request->reportEndDate
         ];
-        //die($data);
 
-        $report = App::make(GetDisaggregatedReportAction::class)->run($data);
-        //die($report);
+        if (is_null($data['type']))
+            $report = App::make(GetDisaggregatedReportAction::class)->run2($data);
+        else
+            $report = App::make(GetDisaggregatedReportAction::class)->run($data);
 
         return response()->json(
             [
@@ -137,6 +138,7 @@ class ReportAPIController extends Controller
             ]
         );
     }
+
 
     public function exportAgeDisaggregates(Request $request)
     {

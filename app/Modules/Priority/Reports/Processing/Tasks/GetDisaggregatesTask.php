@@ -4,6 +4,17 @@ namespace App\Modules\Priority\Reports\Processing\Tasks;
 
 class GetDisaggregatesTask
 {
+    private function calculategrouptotal($group){
+        $malevalues = array_values($group['males']['disaggregatedByAge']) ;
+        $maletotal = array_reduce($malevalues,function($a, $b){ return $a + $b;});
+
+        $femalevalues = array_values($group['females']['disaggregatedByAge']) ;
+        $femaletotal = array_reduce($femalevalues,function($a, $b){ return $a + $b;});
+
+        return array( 'total' => $maletotal + $femaletotal, 'males' => $maletotal , 'females' => $femaletotal);
+
+
+    }
     public function run($eventQuery, $parsedReportDate)
     {
         $payload = [
@@ -65,6 +76,19 @@ class GetDisaggregatesTask
             ]
         ];
 
+        //Correcting totals of adults
+        $adulttotals = $this->calculategrouptotal($payload['adults']);
+        $payload['adults']['males']['count'] = $adulttotals['males'];
+        $payload['adults']['females']['count'] = $adulttotals['females'];
+        $payload['adults']['count'] = $payload['adults']['males']['count'] + $payload['adults']['females']['count'] ;
+
+        //Correcting totals of peds      
+        $pedstotals = $this->calculategrouptotal($payload['pediatrics']);;
+        $payload['pediatrics']['males']['count'] = $pedstotals['males'];
+        $payload['pediatrics']['females']['count'] = $pedstotals['females'];
+        $payload['pediatrics']['count'] = $payload['pediatrics']['males']['count'] + $payload['pediatrics']['females']['count'] ;
+
+        $payload['total'] = $payload['adults']['count'] + $payload['pediatrics']['count'];
         return $payload;
     }
 

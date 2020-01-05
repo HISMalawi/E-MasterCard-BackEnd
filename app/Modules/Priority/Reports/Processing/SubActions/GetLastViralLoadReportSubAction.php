@@ -19,6 +19,7 @@ class GetLastViralLoadReportSubAction
     {
         $conceptRepo = Concepts::repository();
 
+        echo "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%";
         $lastViralLoadConcept = $conceptRepo->get(46);
 
         $encounterType = EncounterTypes::repository()->get(4);

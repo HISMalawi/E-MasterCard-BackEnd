@@ -16,7 +16,7 @@ class CreatePatientIdentifierTable extends Migration
         Schema::create('patient_identifier', function (Blueprint $table) {
             $table->increments('patient_identifier_id');
             $table->integer('patient_id')->unsigned()->default(0);
-            $table->integer('identifier')->unique()->unsigned();
+            $table->integer('identifier')->unique()->unsigned()->index();
             $table->integer('identifier_type')->unsigned();
             $table->integer('preferred')->default(0);
             $table->integer('location_id')->nullable();
@@ -35,12 +35,12 @@ class CreatePatientIdentifierTable extends Migration
             $table->foreign('patient_id')
                 ->references('patient_id')
                 ->on('patient')
-                ->onDelete('cascade');
+                ->onDelete('restrict');
 
             $table->foreign('identifier_type')
                 ->references('patient_identifier_type_id')
                 ->on('patient_identifier_type')
-                ->onDelete('cascade');
+                ->onDelete('restrict');
         });
 
 

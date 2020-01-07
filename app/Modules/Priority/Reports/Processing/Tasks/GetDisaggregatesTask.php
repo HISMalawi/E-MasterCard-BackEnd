@@ -91,7 +91,10 @@ class GetDisaggregatesTask
         $payload['pediatrics']['females']['count'] = $pedstotals['females'];
         $payload['pediatrics']['count'] = $payload['pediatrics']['males']['count'] + $payload['pediatrics']['females']['count'] ;
         
-        $payload['total'] = $payload['adults']['count'] + $payload['pediatrics']['count'];
+        //Correcting totals of unknown age
+        $unknowagetotal = $payload['unknownAge']['males'] +  $payload['unknownAge']['females'];
+        
+        $payload['total'] = $payload['adults']['count'] + $payload['pediatrics']['count'] + $unknowagetotal;
 
         return $payload;
     }
@@ -231,8 +234,11 @@ class GetDisaggregatesTask
         $payload['pediatrics']['males']['count'] = $pedstotals['males'];
         $payload['pediatrics']['females']['count'] = $pedstotals['females'];
         $payload['pediatrics']['count'] = $payload['pediatrics']['males']['count'] + $payload['pediatrics']['females']['count'] ;
+
+        //Correcting totals of unknown age
+        $unknowagetotal = $payload['unknownAge']['males'] +  $payload['unknownAge']['females'];
         
-        $payload['total'] = $payload['adults']['count'] + $payload['pediatrics']['count'];     
+        $payload['total'] = $payload['adults']['count'] + $payload['pediatrics']['count'] + $unknowagetotal;     
 
         return $payload;
     }

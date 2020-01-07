@@ -51,7 +51,7 @@ SELECT
     p.person_id patient_id, n.given_name, n.middle_name, n.family_name,
     p.birthdate, p.birthdate_estimated, p.gender,  p.dead, p.death_date, p.date_created,
     a.city_village village, i.identifier arv_number, i2.identifier national_health_id, i.patient_identifier_id
-FROM emastercard.person p
+FROM person p
 LEFT JOIN person_name n ON n.person_id = p.person_id AND n.voided = 0
 LEFT JOIN person_address a ON a.person_id = p.person_id AND a.voided = 0
 LEFT JOIN patient_identifier i On i.patient_id = p.person_id AND i.voided = 0
@@ -64,6 +64,7 @@ WHERE p.voided = 0 AND p.person_id=";
         for ($i=0; $i < sizeof($data); $i++) { 
 
             $results = DB::select(DB::raw($sql.$data[$i]->patient_id." LIMIT 1"));
+            
             $person = array(
                 "object" => "PersonResource",
                 "person_id" => $data[$i]->patient_id,
@@ -72,7 +73,25 @@ WHERE p.voided = 0 AND p.person_id=";
                     "given"=>$results[0]->given_name,
                     "middle"=> $results[0]->middle_name,
                     "family"=> $results[0]->family_name
-                )
+                ),
+                "personAddress" => array(
+                    "cityVillage" =>null,
+                    "countyDistrict" => null,
+                    "region" => null,
+                    "townshipDivision" => null
+                ),
+                "gender" => $results[0]->gender,
+                "birthdate" => $results[0]->birthdate,
+                "birthdateEstimated" => $results[0]->birthdate_estimated,
+                "outcomeDetails" => null,
+                "dead" => false,
+                "causeOfDeath" => null,
+                "dateCreated" => array(
+                    "date" => $data[$i]->date_created,
+                    "timezone_type" => 3,
+                    "timezone" => "UTC"
+                ),
+                "uuid" => ""                
                 
                 
             );
@@ -86,16 +105,12 @@ WHERE p.voided = 0 AND p.person_id=";
                 'fullArtNumber' => $results[0]->arv_number,
                 'lastVisitDate' => null,
                 'guardianName' => $data[$i]->guardian_name,
-                'patientPhone' => null,
-                'guardianPhone' => null,
-                'followUp' => null,
-                'soldier' => 0,
-                'guardianRelation' => null,
-                'person' => $person,
-                'guardianRelation' => null,
-                'guardianRelation' => null,
-                'guardianRelation' => null,
-
+                'patientPhone' => $data[$i]->patient_phone,
+                'guardianPhone' => $data[$i]->guardian_phone,
+                'followUp' => $data[$i]->follow_up,
+                'soldier' => $data[$i]->soldier,
+                'guardianRelation' => $data[$i]->guardian_relation,
+                'person' => $person
 
             ));
 

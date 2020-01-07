@@ -49,7 +49,7 @@ class PatientAPIController extends  Controller
         $sql = "
 SELECT
     p.person_id patient_id, n.given_name, n.middle_name, n.family_name,
-    p.birthdate, p.birthdate_estimated, p.gender,  p.dead, p.death_date, p.date_created,
+    p.birthdate, p.birthdate_estimated, p.gender,  p.dead, p.death_date, p.date_created, p.uuid,
     a.city_village village, i.identifier arv_number, i2.identifier national_health_id, i.patient_identifier_id
 FROM person p
 LEFT JOIN person_name n ON n.person_id = p.person_id AND n.voided = 0
@@ -75,7 +75,7 @@ WHERE p.voided = 0 AND p.person_id=";
                     "family"=> $results[0]->family_name
                 ),
                 "personAddress" => array(
-                    "cityVillage" =>null,
+                    "cityVillage" => $results[0]->village,
                     "countyDistrict" => null,
                     "region" => null,
                     "townshipDivision" => null
@@ -91,7 +91,7 @@ WHERE p.voided = 0 AND p.person_id=";
                     "timezone_type" => 3,
                     "timezone" => "UTC"
                 ),
-                "uuid" => ""                
+                "uuid" => $results[0]->uuid                
                 
                 
             );

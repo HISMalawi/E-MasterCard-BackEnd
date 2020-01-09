@@ -99,7 +99,7 @@ WHERE p.voided = 0 AND p.person_id=";
             array_push($processed, array(
 
                 'object' => 'PatientResource' ,
-                'Patient_id' => $results[0]->patient_id ,
+                'patientID' => $results[0]->patient_id ,
                 'patientIdentifierID' => $results[0]->patient_identifier_id,
                 'artNumber' => $results[0]->arv_number,
                 'fullArtNumber' => $results[0]->arv_number,

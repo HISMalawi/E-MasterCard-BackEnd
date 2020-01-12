@@ -16,30 +16,22 @@ class GetDisaggregatedReportAction
 
         if ($data['code'] == 1)
         {
-            if ($data['type'] == 'TXCurrent'){
+            if ($data['type'] == 'TXCurrent')
                 $disaggregatedReportPayload = App::make(GetTxCurrentDisAggReportSubAction::class)->run($data['reportEndDate']);
-            }
-            elseif ($data['type'] == 'defaulted1Month'){
+            elseif ($data['type'] == 'defaulted1Month')
                 $disaggregatedReportPayload = App::make(GetDefaultersDisAggReportSubAction::class)->run($data['reportEndDate'],'defaulted1Month');
-            }
-            elseif($data['type'] == 'defaulted2Months'){
+            elseif($data['type'] == 'defaulted2Months')
                 $disaggregatedReportPayload = App::make(GetDefaultersDisAggReportSubAction::class)->run($data['reportEndDate'],'defaulted2Months');
-            }
-            elseif($data['type'] == 'defaulted3MonthsPlus'){
+            elseif($data['type'] == 'defaulted3MonthsPlus')
                 $disaggregatedReportPayload = App::make(GetDefaultersDisAggReportSubAction::class)->run($data['reportEndDate'],'defaulted3MonthsPlus');
-            }
-            elseif($data['type'] == 'stopped'){
+            elseif($data['type'] == 'stopped')
                 $disaggregatedReportPayload = App::make(GetAdverseOutcomeDisAggReportSubAction::class)->run($data['reportEndDate'], 'stopped');
-            }
-            elseif($data['type'] == 'transferredOut'){
+            elseif($data['type'] == 'transferredOut')
                 $disaggregatedReportPayload = App::make(GetAdverseOutcomeDisAggReportSubAction::class)->run($data['reportEndDate'], 'transferredOut');
-            }
-            elseif($data['type'] == 'totalRegistered'){
+            elseif($data['type'] == 'totalRegistered')
                 $disaggregatedReportPayload = App::make(GetAdverseOutcomeDisAggReportSubAction::class)->run($data['reportEndDate'], 'totalRegistered');
-            }
-            else{
+            else
                 $disaggregatedReportPayload = App::make(GetTxCurrentDisAggReportSubAction::class)->run($data['reportEndDate']);
-            }
 
         }else
         {

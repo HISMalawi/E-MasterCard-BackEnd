@@ -84,7 +84,7 @@ class GetDisaggregatesTask
         $payload['adults']['males']['count'] = $adulttotals['males'];
         $payload['adults']['females']['count'] = $adulttotals['females'];
         $payload['adults']['count'] = $payload['adults']['males']['count'] + $payload['adults']['females']['count'] ;
-        
+
         //Correcting totals of peds      
         $pedstotals = $this->calculategrouptotal($payload['pediatrics']);;
         $payload['pediatrics']['males']['count'] = $pedstotals['males'];
@@ -95,6 +95,7 @@ class GetDisaggregatesTask
         $unknowagetotal = $payload['unknownAge']['males'] +  $payload['unknownAge']['females'];
         
         $payload['total'] = $payload['adults']['count'] + $payload['pediatrics']['count'] + $unknowagetotal;
+
 
         return $payload;
     }
@@ -129,7 +130,7 @@ class GetDisaggregatesTask
                             '35-39' => $this->copyQuery($eventQuery)->whereBetween('registration_age', [35, 39])->where('gender', 'F')->count(),
                             '40-44' => $this->copyQuery($eventQuery)->whereBetween('registration_age', [40, 44])->where('gender', 'F')->count(),
                             '45-49' => $this->copyQuery($eventQuery)->whereBetween('registration_age', [45, 49])->where('gender', 'F')->count(),
-                            '50+' => $this->copyQuery($eventQuery)->where('registration_age', '>=', 15)->where('gender', 'F')->count(),
+                            '50+' => $this->copyQuery($eventQuery)->where('registration_age', '>=', 50)->where('gender', 'F')->count(),
                         ]
                     ]
                 ],
@@ -239,6 +240,7 @@ class GetDisaggregatesTask
         $unknowagetotal = $payload['unknownAge']['males'] +  $payload['unknownAge']['females'];
         
         $payload['total'] = $payload['adults']['count'] + $payload['pediatrics']['count'] + $unknowagetotal;     
+
 
         return $payload;
     }

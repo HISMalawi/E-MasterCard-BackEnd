@@ -181,84 +181,142 @@ class GetDisaggregatedReportAction
         }
         switch ($type) {
             case 'txCurrent':
-                $sql = "SELECT distinct p.person_id ,TIMESTAMPDIFF(year, p.birthdate, date(obs.value_datetime)) years, i.identifier,t.value_text,  p.* 
+                $sql = "SELECT 
+                      distinct p.person_id ,
+                      TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, 
+                      i.identifier,t.value_text,  p.* 
                     from person p 
                     inner join patient_identifier i ON i.patient_id = p.person_id
                     inner join obs on obs.person_id = p.person_id AND concept_id = 56
                     inner join obs t on t.person_id = p.person_id AND t.concept_id = 55
-                    where obs.voided = 0 AND i.identifier_type = 4 and obs.value_datetime between '".$startDate."' AND '".$endDate."'";
+                    where obs.voided = 0 AND i.identifier_type = 4 
+                    and obs.value_datetime between '".$startDate."' AND '".$endDate."'";
                 break;
             case 'reInitiated':
-                $sql = "SELECT distinct p.person_id ,TIMESTAMPDIFF(year, p.birthdate, date(obs.value_datetime)) years, i.identifier,t.value_text,  p.* 
+                $sql = "SELECT 
+                      distinct p.person_id ,
+                      TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, 
+                      i.identifier,t.value_text,  p.* 
                     from person p 
                     inner join patient_identifier i ON i.patient_id = p.person_id
                     inner join obs on obs.person_id = p.person_id AND concept_id = 56
                     inner join obs t on t.person_id = p.person_id AND t.concept_id = 55
-                    where obs.voided = 0 AND i.identifier_type = 4 and obs.value_datetime between '".$startDate."' AND '".$endDate."'";
+                    where obs.voided = 0 AND i.identifier_type = 4 AND t.value_text = 'Reinitiation'
+                    and obs.value_datetime between '".$startDate."' AND '".$endDate."'";
                 break;
             case 'txNew':
-                $sql = "SELECT distinct p.person_id ,TIMESTAMPDIFF(year, p.birthdate, date(obs.value_datetime)) years, i.identifier,t.value_text,  p.* 
+                $sql = "SELECT 
+                      distinct p.person_id ,
+                      TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, 
+                      i.identifier,t.value_text,  p.* 
                     from person p 
                     inner join patient_identifier i ON i.patient_id = p.person_id
                     inner join obs on obs.person_id = p.person_id AND concept_id = 56
                     inner join obs t on t.person_id = p.person_id AND t.concept_id = 55
-                    where obs.voided = 0 AND i.identifier_type = 4 and obs.value_datetime between '".$startDate."' AND '".$endDate."'";
+                    where obs.voided = 0 AND i.identifier_type = 4 
+                    AND (t.value_text = 'First Time Initiation' OR  t.value_text IS NULL) 
+                    and obs.value_datetime between '".$startDate."' AND '".$endDate."'";
                 break;
             case 'defaulted1Month':
-                $sql = "SELECT distinct p.person_id ,TIMESTAMPDIFF(year, p.birthdate, date(obs.value_datetime)) years, i.identifier,t.value_text,  p.* 
-                    from person p 
-                    inner join patient_identifier i ON i.patient_id = p.person_id
-                    inner join obs on obs.person_id = p.person_id AND concept_id = 56
-                    inner join obs t on t.person_id = p.person_id AND t.concept_id = 55
-                    where obs.voided = 0 AND i.identifier_type = 4 and obs.value_datetime between '".$startDate."' AND '".$endDate."'";
+                $sql = "SELECT 
+                    distinct(p.person_id) ,TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, 
+                    i.identifier,t.value_text outcome,  
+                    TIMESTAMPDIFF(month, DATE(t3.value_datetime), DATE(t.obs_datetime)) months_after_reg, p.*
+                  FROM obs t
+                  INNER JOIN person p ON p.person_id = t.person_id
+                  inner join patient_identifier i ON i.patient_id = p.person_id
+                  INNER JOIN obs t3 ON t3.person_id = t.person_id AND t3.concept_id = 56
+                  WHERE t.concept_id = (SELECT concept_id FROM concept_name WHERE name='Adverse Outcome' LIMIT 1)
+                  AND t.obs_datetime = (
+                    SELECT MAX(t2.obs_datetime) FROM obs t2 WHERE t2.person_id = t.person_id 
+                    AND t2.concept_id = t.concept_id AND t2.voided = 0 AND t2.obs_datetime <= '".$endDate."'
+                    ) AND t3.value_datetime BETWEEN '".$startDate."' AND '".$endDate."' 
+                  AND p.voided = 0 AND t.voided = 0 HAVING outcome = 'Def' 
+                  and months_after_reg > 1 AND months_after_reg <= 2";
                 break;
             case 'defaulted2Months':
-                $sql = "SELECT distinct p.person_id ,TIMESTAMPDIFF(year, p.birthdate, date(obs.value_datetime)) years, i.identifier,t.value_text,  p.* 
-                    from person p 
-                    inner join patient_identifier i ON i.patient_id = p.person_id
-                    inner join obs on obs.person_id = p.person_id AND concept_id = 56
-                    inner join obs t on t.person_id = p.person_id AND t.concept_id = 55
-                    where obs.voided = 0 AND i.identifier_type = 4 and obs.value_datetime between '".$startDate."' AND '".$endDate."'";
+                $sql = "SELECT 
+                    distinct(p.person_id) ,TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, 
+                    i.identifier,t.value_text outcome,  
+                    TIMESTAMPDIFF(month, DATE(t3.value_datetime), DATE(t.obs_datetime)) months_after_reg, p.*
+                  FROM obs t
+                  INNER JOIN person p ON p.person_id = t.person_id
+                  inner join patient_identifier i ON i.patient_id = p.person_id
+                  INNER JOIN obs t3 ON t3.person_id = t.person_id AND t3.concept_id = 56
+                  WHERE t.concept_id = (SELECT concept_id FROM concept_name WHERE name='Adverse Outcome' LIMIT 1)
+                  AND t.obs_datetime = (
+                    SELECT MAX(t2.obs_datetime) FROM obs t2 WHERE t2.person_id = t.person_id 
+                    AND t2.concept_id = t.concept_id AND t2.voided = 0 AND t2.obs_datetime <= '".$endDate."'
+                    ) AND t3.value_datetime BETWEEN '".$startDate."' AND '".$endDate."' 
+                  AND p.voided = 0 AND t.voided = 0 HAVING outcome = 'Def'
+                  and months_after_reg > 2 AND months_after_reg <= 3";
                 break;
             case 'defaulted3MonthsPlus':
-                $sql = "SELECT distinct p.person_id ,TIMESTAMPDIFF(year, p.birthdate, date(obs.value_datetime)) years, i.identifier,t.value_text,  p.* 
-                    from person p 
-                    inner join patient_identifier i ON i.patient_id = p.person_id
-                    inner join obs on obs.person_id = p.person_id AND concept_id = 56
-                    inner join obs t on t.person_id = p.person_id AND t.concept_id = 55
-                    where obs.voided = 0 AND i.identifier_type = 4 and obs.value_datetime between '".$startDate."' AND '".$endDate."'";
+                $sql = "SELECT 
+                    distinct(p.person_id) ,TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, 
+                    i.identifier,t.value_text outcome,  
+                    TIMESTAMPDIFF(month, DATE(t3.value_datetime), DATE(t.obs_datetime)) months_after_reg, p.*
+                  FROM obs t
+                  INNER JOIN person p ON p.person_id = t.person_id
+                  inner join patient_identifier i ON i.patient_id = p.person_id
+                  INNER JOIN obs t3 ON t3.person_id = t.person_id AND t3.concept_id = 56
+                  WHERE t.concept_id = (SELECT concept_id FROM concept_name WHERE name='Adverse Outcome' LIMIT 1)
+                  AND t.obs_datetime = (
+                    SELECT MAX(t2.obs_datetime) FROM obs t2 WHERE t2.person_id = t.person_id 
+                    AND t2.concept_id = t.concept_id AND t2.voided = 0 AND t2.obs_datetime <= '".$endDate."'
+                    ) AND t3.value_datetime BETWEEN '".$startDate."' AND '".$endDate."' 
+                  AND p.voided = 0 AND t.voided = 0 HAVING outcome = 'Def' and months_after_reg > 3";
                 break;
             case 'stopped':
-                $sql = "SELECT distinct p.person_id ,TIMESTAMPDIFF(year, p.birthdate, date(obs.value_datetime)) years, i.identifier,t.value_text,  p.* 
+                $sql = "SELECT 
+                      distinct p.person_id ,
+                      TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, 
+                      i.identifier,t.value_text,  p.* 
                     from person p 
                     inner join patient_identifier i ON i.patient_id = p.person_id
                     inner join obs on obs.person_id = p.person_id AND concept_id = 56
-                    inner join obs t on t.person_id = p.person_id AND t.concept_id = 55
-                    where obs.voided = 0 AND i.identifier_type = 4 and obs.value_datetime between '".$startDate."' AND '".$endDate."'";
+                    inner join obs t on t.person_id = p.person_id 
+                    AND t.concept_id = (SELECT concept_id FROM concept_name WHERE name = 'Adverse Outcome' LIMIT 1)
+                    where obs.voided = 0 AND i.identifier_type = 4 AND t.value_text = 'Stop'
+                    and obs.value_datetime between '".$startDate."' AND '".$endDate."'";
                 break;
             case 'died':
-                $sql = "SELECT distinct p.person_id ,TIMESTAMPDIFF(year, p.birthdate, date(obs.value_datetime)) years, i.identifier,t.value_text,  p.* 
+                $sql = "SELECT 
+                      distinct p.person_id ,
+                      TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, 
+                      i.identifier,t.value_text,  p.* 
                     from person p 
                     inner join patient_identifier i ON i.patient_id = p.person_id
                     inner join obs on obs.person_id = p.person_id AND concept_id = 56
-                    inner join obs t on t.person_id = p.person_id AND t.concept_id = 55
-                    where obs.voided = 0 AND i.identifier_type = 4 and obs.value_datetime between '".$startDate."' AND '".$endDate."'";
+                    inner join obs t on t.person_id = p.person_id 
+                    AND t.concept_id = (SELECT concept_id FROM concept_name WHERE name = 'Adverse Outcome' LIMIT 1)
+                    where obs.voided = 0 AND i.identifier_type = 4 AND t.value_text = 'D'
+                    and obs.value_datetime between '".$startDate."' AND '".$endDate."'";
                 break;
             case 'transferredOut':
-                $sql = "SELECT distinct p.person_id ,TIMESTAMPDIFF(year, p.birthdate, date(obs.value_datetime)) years, i.identifier,t.value_text,  p.* 
+                $sql = "SELECT 
+                      distinct p.person_id ,
+                      TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, 
+                      i.identifier,t.value_text,  p.* 
                     from person p 
                     inner join patient_identifier i ON i.patient_id = p.person_id
                     inner join obs on obs.person_id = p.person_id AND concept_id = 56
-                    inner join obs t on t.person_id = p.person_id AND t.concept_id = 55
-                    where obs.voided = 0 AND i.identifier_type = 4 and obs.value_datetime between '".$startDate."' AND '".$endDate."'";
+                    inner join obs t on t.person_id = p.person_id 
+                    AND t.concept_id = (SELECT concept_id FROM concept_name WHERE name = 'Adverse Outcome' LIMIT 1)
+                    where obs.voided = 0 AND i.identifier_type = 4 AND t.value_text = 'TO'
+                    and obs.value_datetime between '".$startDate."' AND '".$endDate."'";
                 break;
             case 'transferredIn':
-                $sql = "SELECT distinct p.person_id ,TIMESTAMPDIFF(year, p.birthdate, date(obs.value_datetime)) years, i.identifier,t.value_text,  p.* 
+                $sql = "SELECT 
+                      distinct p.person_id , 
+                      TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, 
+                      i.identifier,t.value_text,  p.* 
                     from person p 
                     inner join patient_identifier i ON i.patient_id = p.person_id
                     inner join obs on obs.person_id = p.person_id AND concept_id = 56
                     inner join obs t on t.person_id = p.person_id AND t.concept_id = 55
-                    where obs.voided = 0 AND i.identifier_type = 4 and obs.value_datetime between '".$startDate."' AND '".$endDate."'";
+                    where obs.voided = 0 AND i.identifier_type = 4 AND t.value_text = 'Transfer In' 
+                    and obs.value_datetime between '".$startDate."' AND '".$endDate."'";
                 break;
             
             default:

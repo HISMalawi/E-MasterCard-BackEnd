@@ -66,8 +66,19 @@ class GetDisaggregatedReportAction
         return 0;
     }
 
-    public function getGenderDisaggregatedCount($results,$gender,$agegroup){
-        return 0;
+    public function getGenderDisaggregatedCount($results, $gender, $min_age, $max_age){
+      $total_count = 0;
+      foreach($results as $result){
+        $passedGender[$i] = $result->gender;
+        $passedYear[$i] = (int)$result->years;
+        if($passedGender == $gender){
+          if($passedYear >= $min_age && $passedYear <= $max_age){
+            $total_count += 1;
+          }
+        }
+      }
+      
+      return $total_count;
     }
     private function calculategrouptotal($group){
         $malevalues = array_values($group['males']['disaggregatedByAge']) ;
@@ -95,13 +106,12 @@ class GetDisaggregatedReportAction
         $sql = "
             SELECT 
              distinct p.person_id ,TIMESTAMPDIFF(year, p.birthdate, date(obs.value_datetime)) years, i.identifier,t.value_text,  p.* 
-
-            from person p 
-            inner join patient_identifier i ON i.patient_id = p.person_id
-            inner join obs on obs.person_id = p.person_id AND concept_id = 56
-            inner join obs t on t.person_id = p.person_id AND t.concept_id = 55
-            where obs.voided = 0 AND i.identifier_type = 4 and obs.value_datetime between '".$startDate."' AND '".$endDate."' 
-             ";
+            FROM person p 
+            INNER JOIN patient_identifier i ON i.patient_id = p.person_id
+            INNER JOIN obs on obs.person_id = p.person_id AND concept_id = 56
+            INNER JOIN obs t on t.person_id = p.person_id AND t.concept_id = 55
+            WHERE obs.voided = 0 AND i.identifier_type = 4
+            AND obs.value_datetime between '".$startDate."' AND '".$endDate."'";
 
 
         $results = DB::select(DB::raw($sql));
@@ -110,27 +120,27 @@ class GetDisaggregatedReportAction
             "males" =>array(
                 "count" => null,
                 "disaggregatedByAge" => array(
-                            "15-19" =>  $this->getGenderDisaggregatedCount($results,"M","15-19"),
-                            "20-24" =>  $this->getGenderDisaggregatedCount($results,"M","20-24"),
-                            "25-29" =>  $this->getGenderDisaggregatedCount($results,"M","25-29"),
-                            "30-34" => $this->getGenderDisaggregatedCount($results,"M","30-34"),
-                            "35-39" => $this->getGenderDisaggregatedCount($results,"M","35-39"),
-                            "40-44" => $this->getGenderDisaggregatedCount($results,"M","40-44"),
-                            "45-49" => $this->getGenderDisaggregatedCount($results,"M","45-49"),
-                            "50+"=> $this->getGenderDisaggregatedCount($results,"M","50+")
+                            "15-19" =>  $this->getGenderDisaggregatedCount($results,"M",15, 19),
+                            "20-24" =>  $this->getGenderDisaggregatedCount($results,"M",20, 24),
+                            "25-29" =>  $this->getGenderDisaggregatedCount($results,"M",25,29),
+                            "30-34" => $this->getGenderDisaggregatedCount($results,"M", 30,34),
+                            "35-39" => $this->getGenderDisaggregatedCount($results,"M", 35,39),
+                            "40-44" => $this->getGenderDisaggregatedCount($results,"M", 40,44),
+                            "45-49" => $this->getGenderDisaggregatedCount($results,"M", 45,49),
+                            "50+"=> $this->getGenderDisaggregatedCount($results,"M",50, 10000)
                 )
             ),
             "females" => array(
                 "count" => null,
                 "disaggregatedByAge" => array(
-                            "15-19" =>  $this->getGenderDisaggregatedCount($results,"F","15-19"),
-                            "20-24" =>  $this->getGenderDisaggregatedCount($results,"F","20-24"),
-                            "25-29" =>  $this->getGenderDisaggregatedCount($results,"F","25-29"),
-                            "30-34" => $this->getGenderDisaggregatedCount($results,"F","30-34"),
-                            "35-39" => $this->getGenderDisaggregatedCount($results,"F","35-39"),
-                            "40-44" => $this->getGenderDisaggregatedCount($results,"F","40-44"),
-                            "45-49" => $this->getGenderDisaggregatedCount($results,"F","45-49"),
-                            "50+"=> $this->getGenderDisaggregatedCount($results,"F","50+")
+                            "15-19" =>  $this->getGenderDisaggregatedCount($results,"F", 15,19),
+                            "20-24" =>  $this->getGenderDisaggregatedCount($results,"F", 20,24),
+                            "25-29" =>  $this->getGenderDisaggregatedCount($results,"F", 25,29),
+                            "30-34" => $this->getGenderDisaggregatedCount($results,"F", 30,34),
+                            "35-39" => $this->getGenderDisaggregatedCount($results,"F", 35,39),
+                            "40-44" => $this->getGenderDisaggregatedCount($results,"F", 40,44),
+                            "45-49" => $this->getGenderDisaggregatedCount($results,"F", 45,49),
+                            "50+"=> $this->getGenderDisaggregatedCount($results,"F",  50,10000)
                 )
             )
         );

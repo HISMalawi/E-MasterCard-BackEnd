@@ -188,6 +188,22 @@ class GetDisaggregatedReportAction
                     inner join obs t on t.person_id = p.person_id AND t.concept_id = 55
                     where obs.voided = 0 AND i.identifier_type = 4 and obs.value_datetime between '".$startDate."' AND '".$endDate."'";
                 break;
+            case 'reInitiated':
+                $sql = "SELECT distinct p.person_id ,TIMESTAMPDIFF(year, p.birthdate, date(obs.value_datetime)) years, i.identifier,t.value_text,  p.* 
+                    from person p 
+                    inner join patient_identifier i ON i.patient_id = p.person_id
+                    inner join obs on obs.person_id = p.person_id AND concept_id = 56
+                    inner join obs t on t.person_id = p.person_id AND t.concept_id = 55
+                    where obs.voided = 0 AND i.identifier_type = 4 and obs.value_datetime between '".$startDate."' AND '".$endDate."'";
+                break;
+            case 'txNew':
+                $sql = "SELECT distinct p.person_id ,TIMESTAMPDIFF(year, p.birthdate, date(obs.value_datetime)) years, i.identifier,t.value_text,  p.* 
+                    from person p 
+                    inner join patient_identifier i ON i.patient_id = p.person_id
+                    inner join obs on obs.person_id = p.person_id AND concept_id = 56
+                    inner join obs t on t.person_id = p.person_id AND t.concept_id = 55
+                    where obs.voided = 0 AND i.identifier_type = 4 and obs.value_datetime between '".$startDate."' AND '".$endDate."'";
+                break;
             case 'defaulted1Month':
                 $sql = "SELECT distinct p.person_id ,TIMESTAMPDIFF(year, p.birthdate, date(obs.value_datetime)) years, i.identifier,t.value_text,  p.* 
                     from person p 
@@ -429,15 +445,15 @@ class GetDisaggregatedReportAction
         }elseif($data['code'] == 2)
         {
             $disaggregatedReportPayload = [
-                'txNew' => App::make(GetNewEnrollmentsDisAggReportSubAction::class)->run($data['reportStartDate'], $data['reportEndDate'], 'TXNew'),
-                'reInitiated' => App::make(GetNewEnrollmentsDisAggReportSubAction::class)->run($data['reportStartDate'], $data['reportEndDate'], 'reInitiated'),
-                'transferredIn' => App::make(GetNewEnrollmentsDisAggReportSubAction::class)->run($data['reportStartDate'], $data['reportEndDate'], 'transferredIn'),
-                'defaulted1MonthPlus' => App::make(GetDefaultersDisAggReportSubAction::class)->run2($data['reportStartDate'], $data['reportEndDate'],'defaulted1MonthPlus'),
-                'defaulted2MonthsPlus' => App::make(GetDefaultersDisAggReportSubAction::class)->run2($data['reportStartDate'], $data['reportEndDate'],'defaulted2MonthsPlus'),
-                'defaulted3MonthsPlus' => App::make(GetDefaultersDisAggReportSubAction::class)->run2($data['reportStartDate'], $data['reportEndDate'],'defaulted3MonthsPlus'),
-                'stopped' => App::make(GetAdverseOutcomeDisAggReportSubAction::class)->run2($data['reportStartDate'], $data['reportEndDate'], 'stopped'),
-                'died' => App::make(GetAdverseOutcomeDisAggReportSubAction::class)->run2($data['reportStartDate'], $data['reportEndDate'], 'died'),
-                'transferredOut' => App::make(GetAdverseOutcomeDisAggReportSubAction::class)->run2($data['reportStartDate'], $data['reportEndDate'], 'transferredOut'),
+                'txNew' => $this->indicators($data,'txNew'),
+                'reInitiated' => $this->indicators($data,'reInitiated'),
+                'transferredIn' => $this->indicators($data,'transferredIn'),
+                'defaulted1MonthPlus' => $this->indicators($data,'defaulted1Month'),
+                'defaulted2MonthsPlus' => $this->indicators($data,'defaulted2Months'),
+                'defaulted3MonthsPlus' => $this->indicators($data,'defaulted3MonthsPlus'),
+                'stopped' => $this->indicators($data,'stopped'),
+                'died' => $this->indicators($data,'died'),
+                'transferredOut' => $this->indicators($data,'transferredOut'),
             ];
         }
 

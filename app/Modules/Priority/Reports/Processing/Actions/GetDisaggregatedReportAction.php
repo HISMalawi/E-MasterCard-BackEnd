@@ -105,7 +105,8 @@ class GetDisaggregatedReportAction
 
         $sql = "
             SELECT 
-             distinct p.person_id ,TIMESTAMPDIFF(year, p.birthdate, date(obs.value_datetime)) years, i.identifier,t.value_text,  p.* 
+             distinct p.person_id , TIMESTAMPDIFF(year, p.birthdate, DATE('".$endDate."')) years, 
+             i.identifier,t.value_text,  p.* 
             FROM person p 
             INNER JOIN patient_identifier i ON i.patient_id = p.person_id
             INNER JOIN obs on obs.person_id = p.person_id AND concept_id = 56

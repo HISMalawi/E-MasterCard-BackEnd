@@ -127,7 +127,7 @@ class GetDisaggregatedReportAction
                 $data = $this->filterAge($results,15,19,$gender);
                 break;
             case '20-24':
-                $data = $this->filterAge($results,20,24,$gender,);
+                $data = $this->filterAge($results,20,24,$gender);
                 break;
             case '25-29':
                 $data = $this->filterAge($results,25,29,$gender);

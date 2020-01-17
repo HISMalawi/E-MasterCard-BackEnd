@@ -195,13 +195,20 @@ class GetDisaggregatedReportAction
                 $sql = "SELECT 
                       distinct p.person_id ,
                       TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, 
-                      i.identifier,t.value_text,  p.* 
+                      i.identifier,t.value_text, o.value_text outcome, p.* 
                     from person p 
                     inner join patient_identifier i ON i.patient_id = p.person_id
                     inner join obs on obs.person_id = p.person_id AND concept_id = 56
                     inner join obs t on t.person_id = p.person_id AND t.concept_id = 55
+                    INNER JOIN obs o on o.person_id = p.person_id 
+                    AND o.concept_id = (SELECT concept_id FROM concept_name WHERE name='Adverse Outcome' LIMIT 1)
                     where obs.voided = 0 AND i.identifier_type = 4 
-                    and obs.value_datetime between '".$startDate."' AND '".$endDate."'";
+                    AND obs.value_datetime between '".$startDate."' AND '".$endDate."'
+                    AND o.voided = 0 AND o.obs_datetime = (
+                      SELECT max(o2.obs_datetime) from obs o2 where o2.person_id = p.person_id 
+                      and o2.voided = 0 and o2.obs_datetime <= '".$endDate."'
+                      and o2.concept_id = (SELECT concept_id FROM concept_name WHERE name='Adverse Outcome' LIMIT 1)
+                    ) HAVING outcome IS NULL";
                 break;
             case 'reInitiated':
                 $sql = "SELECT 

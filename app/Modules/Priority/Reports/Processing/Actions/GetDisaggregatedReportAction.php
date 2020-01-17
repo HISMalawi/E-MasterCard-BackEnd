@@ -65,21 +65,32 @@ class GetDisaggregatedReportAction
 
 
     public function getUnknownCount($results,$gender){
+        $count = 0;
+        for ($i=0; $i < sizeof($results); $i++) { 
+
+            if($results[$i]->gender == $gender)
+            {
+                
+
+                $count = $count + 1;
+            }
+
+        }
 
 
-        return 0;
+        return $count;
     }
 
-    public function filterAge($results,$startAgeDate,$endAgeDate,$gender)
+    public function filterAge($results,$startAge,$endAge,$gender)
     {   
         $count =0;
         //echo $startAgeDate.' : '.$endAgeDate.' <br>';
         $results2 = array();
         for ($i=0; $i < sizeof($results); $i++) { 
-            $chadate = Carbon::parse($results[$i]->birthdate);
-            if($startAgeDate !='')
+            
+            if($endAge !='')
             {
-                if($chadate->between($startAgeDate,$endAgeDate) && $results[$i]->gender == $gender)
+                if($results[$i]->years >= $startAge && $results[$i]->years <= $endAge && $results[$i]->gender == $gender)
                 {
                     
                     $count = $count + 1;
@@ -93,7 +104,7 @@ class GetDisaggregatedReportAction
             else
             {
                 //greater than 50 years
-                if($chadate->lt($endAgeDate) && $results[$i]->gender == $gender)
+                if( $results[$i]->years >= $startAge && $results[$i]->gender == $gender)
                 {
                     $count = $count + 1;
                 }
@@ -113,40 +124,40 @@ class GetDisaggregatedReportAction
     public function getGenderDisaggregatedCount($results,$gender,$agegroup){
         switch ($agegroup) {
             case '15-19':
-                $data = $this->filterAge($results,Carbon::today()->subYears(19),Carbon::today()->subYears(15),$gender);
+                $data = $this->filterAge($results,15,19,$gender);
                 break;
             case '20-24':
-                $data = $this->filterAge($results,Carbon::today()->subYears(24),Carbon::today()->subYears(20),$gender,);
+                $data = $this->filterAge($results,20,24,$gender,);
                 break;
             case '25-29':
-                $data = $this->filterAge($results,Carbon::today()->subYears(29),Carbon::today()->subYears(25),$gender);
+                $data = $this->filterAge($results,25,29,$gender);
                 break;
             case '30-34':
-                $data = $this->filterAge($results,Carbon::today()->subYears(34),Carbon::today()->subYears(30),$gender);
+                $data = $this->filterAge($results,30,34,$gender);
                 break;
             case '35-39':
-                $data = $this->filterAge($results,Carbon::today()->subYears(39),Carbon::today()->subYears(35),$gender);
+                $data = $this->filterAge($results,35,39,$gender);
                 break;
             case '40-44':
-                $data = $this->filterAge($results,Carbon::today()->subYears(44),Carbon::today()->subYears(40),$gender);
+                $data = $this->filterAge($results,40,44,$gender);
                 break;
             case '45-49':
-                $data = $this->filterAge($results,Carbon::today()->subYears(49),Carbon::today()->subYears(45),$gender);
+                $data = $this->filterAge($results,45,49,$gender);
                 break;
             case '50+':
-                $data = $this->filterAge($results,'',Carbon::today()->subYears(50),$gender);
+                $data = $this->filterAge($results,50,'',$gender);
                 break;
             case '<1':
-                $data = $this->filterAge($results,Carbon::today()->subYears(1),Carbon::today(),$gender);
+                $data = $this->filterAge($results,0,1,$gender);
                 break;
             case '1-4':
-                $data = $this->filterAge($results,Carbon::today()->subYears(4),Carbon::today()->subYears(1),$gender);
+                $data = $this->filterAge($results,1,4,$gender);
                 break;
             case '5-9':
-                $data = $this->filterAge($results,Carbon::today()->subYears(9),Carbon::today()->subYears(5),$gender);
+                $data = $this->filterAge($results,5,9,$gender);
                 break;
             case '10-14':
-                $data = $this->filterAge($results,Carbon::today()->subYears(14),Carbon::today()->subYears(10),$gender);
+                $data = $this->filterAge($results,10,14,$gender);
                 break;
 
 
@@ -389,7 +400,7 @@ class GetDisaggregatedReportAction
         $one_four_f = $data_f["Count"];
         $data_f = $this->getGenderDisaggregatedCount($data_f["Data"],"F","5-9");
         $five_nine_f = $data_f["Count"];
-        $data = $this->getGenderDisaggregatedCount($data_f["Data"],"F","10-14");
+        $data_f = $this->getGenderDisaggregatedCount($data_f["Data"],"F","10-14");
         $ten_fourteen_f = $data_f["Count"];
 
 
@@ -449,8 +460,8 @@ class GetDisaggregatedReportAction
         );
         $unknownAge = array(
             "count"=>null,
-            "males" =>$this->getUnknownCount($results,'M'),
-            "females" => $this->getUnknownCount($results,'M')
+            "males" =>$this->getUnknownCount($data_f["Data"],'M'),
+            "females" => $this->getUnknownCount($data_f["Data"],'F')
         );
         $txCur = array(
             "total"=>"",

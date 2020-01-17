@@ -183,7 +183,7 @@ class GetDisaggregatedReportAction
 
     private function getSql($type,$data)
     {
-        if(is_null($data['reportStartDate']) || $data['reportStartDate'] == "null"){
+        if($data['reportStartDate'] == "null"){
             $startDate = Carbon::parse("1900-01-01 00:00:00");
             $endDate = Carbon::parse($data['reportEndDate']." 23:59:59");
         }else{

@@ -230,53 +230,81 @@ class GetDisaggregatedReportAction
                 break;
             case 'defaulted1Month':
                 $sql = "SELECT 
-                    distinct(p.person_id) ,TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, 
-                    i.identifier,t.value_text outcome,  
-                    TIMESTAMPDIFF(month, DATE(t3.value_datetime), DATE(t.obs_datetime)) months_after_reg, p.*
-                  FROM obs t
-                  INNER JOIN person p ON p.person_id = t.person_id
-                  inner join patient_identifier i ON i.patient_id = p.person_id
-                  INNER JOIN obs t3 ON t3.person_id = t.person_id AND t3.concept_id = 56
-                  WHERE t.concept_id = (SELECT concept_id FROM concept_name WHERE name='Adverse Outcome' LIMIT 1)
-                  AND t.obs_datetime = (
-                    SELECT MAX(t2.obs_datetime) FROM obs t2 WHERE t2.person_id = t.person_id 
-                    AND t2.concept_id = t.concept_id AND t2.voided = 0 AND t2.obs_datetime <= '".$endDate."'
-                    ) AND t3.value_datetime BETWEEN '".$startDate."' AND '".$endDate."' 
-                  AND p.voided = 0 AND t.voided = 0 HAVING outcome = 'Def' 
-                  and months_after_reg > 1 AND months_after_reg <= 2";
+                  distinct p.person_id , i.identifier, TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, 
+                  date(t.value_datetime) next_appointment_date, date(e.encounter_datetime) last_encounter_date,
+                  TIMESTAMPDIFF(month, date(t.value_datetime), date(e.encounter_datetime)) months_btwn,
+                  o.value_text outcome, p.*
+                FROM person p 
+                INNER JOIN patient_identifier i ON i.patient_id = p.person_id
+                INNER JOIN obs r on r.person_id = p.person_id AND r.concept_id = 56
+                INNER JOIN encounter e on e.encounter_id = r.encounter_id 
+                INNER JOIN obs t on t.person_id = p.person_id AND t.concept_id = 47
+                INNER JOIN obs o on o.person_id = p.person_id 
+                AND o.concept_id = (SELECT concept_id FROM concept_name WHERE name='Adverse Outcome' LIMIT 1)
+                  where r.voided = 0 AND i.identifier_type = 4 
+                  and t.value_datetime = (
+                    select max(t5.value_datetime) from obs t5 where t5.person_id = t.person_id
+                    and t5.concept_id = 47 and t5.obs_datetime <= '".$endDate."'
+                  ) and r.obs_datetime between '".$startDate."' and '".$endDate."'
+                  and e.voided = 0 and e.encounter_datetime = (
+                    SELECT max(encounter_datetime) from encounter e2 where e2.patient_id = e.patient_id 
+                    and e2.voided = 0 and e.encounter_datetime <= '".$endDate."'
+                  ) AND o.obs_datetime = (
+                    SELECT MAX(o2.obs_datetime) FROM obs o2 WHERE o2.person_id = t.person_id 
+                    AND o2.concept_id = t.concept_id AND o2.voided = 0 AND o2.obs_datetime <= '".$endDate."'
+                  ) HAVING outcome IS NULL AND months_btwn between 1 and 2";
                 break;
             case 'defaulted2Months':
                 $sql = "SELECT 
-                    distinct(p.person_id) ,TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, 
-                    i.identifier,t.value_text outcome,  
-                    TIMESTAMPDIFF(month, DATE(t3.value_datetime), DATE(t.obs_datetime)) months_after_reg, p.*
-                  FROM obs t
-                  INNER JOIN person p ON p.person_id = t.person_id
-                  inner join patient_identifier i ON i.patient_id = p.person_id
-                  INNER JOIN obs t3 ON t3.person_id = t.person_id AND t3.concept_id = 56
-                  WHERE t.concept_id = (SELECT concept_id FROM concept_name WHERE name='Adverse Outcome' LIMIT 1)
-                  AND t.obs_datetime = (
-                    SELECT MAX(t2.obs_datetime) FROM obs t2 WHERE t2.person_id = t.person_id 
-                    AND t2.concept_id = t.concept_id AND t2.voided = 0 AND t2.obs_datetime <= '".$endDate."'
-                    ) AND t3.value_datetime BETWEEN '".$startDate."' AND '".$endDate."' 
-                  AND p.voided = 0 AND t.voided = 0 HAVING outcome = 'Def'
-                  and months_after_reg > 2 AND months_after_reg <= 3";
+                  distinct p.person_id , i.identifier, TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, 
+                  date(t.value_datetime) next_appointment_date, date(e.encounter_datetime) last_encounter_date,
+                  TIMESTAMPDIFF(month, date(t.value_datetime), date(e.encounter_datetime)) months_btwn,
+                  o.value_text outcome, p.*
+                FROM person p 
+                INNER JOIN patient_identifier i ON i.patient_id = p.person_id
+                INNER JOIN obs r on r.person_id = p.person_id AND r.concept_id = 56
+                INNER JOIN encounter e on e.encounter_id = r.encounter_id 
+                INNER JOIN obs t on t.person_id = p.person_id AND t.concept_id = 47
+                INNER JOIN obs o on o.person_id = p.person_id 
+                AND o.concept_id = (SELECT concept_id FROM concept_name WHERE name='Adverse Outcome' LIMIT 1)
+                  where r.voided = 0 AND i.identifier_type = 4 
+                  and t.value_datetime = (
+                    select max(t5.value_datetime) from obs t5 where t5.person_id = t.person_id
+                    and t5.concept_id = 47 and t5.obs_datetime <= '".$endDate."'
+                  ) and r.obs_datetime between '".$startDate."' and '".$endDate."'
+                  and e.voided = 0 and e.encounter_datetime = (
+                    SELECT max(encounter_datetime) from encounter e2 where e2.patient_id = e.patient_id 
+                    and e2.voided = 0 and e.encounter_datetime <= '".$endDate."'
+                  ) AND o.obs_datetime = (
+                    SELECT MAX(o2.obs_datetime) FROM obs o2 WHERE o2.person_id = t.person_id 
+                    AND o2.concept_id = t.concept_id AND o2.voided = 0 AND o2.obs_datetime <= '".$endDate."'
+                  ) HAVING outcome IS NULL AND months_btwn > 2 and months_btwn <= 3";
                 break;
             case 'defaulted3MonthsPlus':
                 $sql = "SELECT 
-                    distinct(p.person_id) ,TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, 
-                    i.identifier,t.value_text outcome,  
-                    TIMESTAMPDIFF(month, DATE(t3.value_datetime), DATE(t.obs_datetime)) months_after_reg, p.*
-                  FROM obs t
-                  INNER JOIN person p ON p.person_id = t.person_id
-                  inner join patient_identifier i ON i.patient_id = p.person_id
-                  INNER JOIN obs t3 ON t3.person_id = t.person_id AND t3.concept_id = 56
-                  WHERE t.concept_id = (SELECT concept_id FROM concept_name WHERE name='Adverse Outcome' LIMIT 1)
-                  AND t.obs_datetime = (
-                    SELECT MAX(t2.obs_datetime) FROM obs t2 WHERE t2.person_id = t.person_id 
-                    AND t2.concept_id = t.concept_id AND t2.voided = 0 AND t2.obs_datetime <= '".$endDate."'
-                    ) AND t3.value_datetime BETWEEN '".$startDate."' AND '".$endDate."' 
-                  AND p.voided = 0 AND t.voided = 0 HAVING outcome = 'Def' and months_after_reg > 3";
+                  distinct p.person_id , i.identifier, TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, 
+                  date(t.value_datetime) next_appointment_date, date(e.encounter_datetime) last_encounter_date,
+                  TIMESTAMPDIFF(month, date(t.value_datetime), date(e.encounter_datetime)) months_btwn,
+                  o.value_text outcome, p.*
+                FROM person p 
+                INNER JOIN patient_identifier i ON i.patient_id = p.person_id
+                INNER JOIN obs r on r.person_id = p.person_id AND r.concept_id = 56
+                INNER JOIN encounter e on e.encounter_id = r.encounter_id 
+                INNER JOIN obs t on t.person_id = p.person_id AND t.concept_id = 47
+                INNER JOIN obs o on o.person_id = p.person_id 
+                AND o.concept_id = (SELECT concept_id FROM concept_name WHERE name='Adverse Outcome' LIMIT 1)
+                  where r.voided = 0 AND i.identifier_type = 4 
+                  and t.value_datetime = (
+                    select max(t5.value_datetime) from obs t5 where t5.person_id = t.person_id
+                    and t5.concept_id = 47 and t5.obs_datetime <= '".$endDate."'
+                  ) and r.obs_datetime between '".$startDate."' and '".$endDate."'
+                  and e.voided = 0 and e.encounter_datetime = (
+                    SELECT max(encounter_datetime) from encounter e2 where e2.patient_id = e.patient_id 
+                    and e2.voided = 0 and e.encounter_datetime <= '".$endDate."'
+                  ) AND o.obs_datetime = (
+                    SELECT MAX(o2.obs_datetime) FROM obs o2 WHERE o2.person_id = t.person_id 
+                    AND o2.concept_id = t.concept_id AND o2.voided = 0 AND o2.obs_datetime <= '".$endDate."'
+                  ) HAVING outcome not in('D', 'TO', 'Stop') AND (months_btwn > 3 OR outcome = 'Def')";
                 break;
             case 'stopped':
                 $sql = "SELECT 

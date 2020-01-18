@@ -142,6 +142,26 @@ class ReportAPIController extends Controller
     }
 
 
+    public function getAgeDisaggregatesPatientList(Request $request)
+    {
+        $data = [
+            'code' => $request->code,
+            'type' => $request->type,
+            'reportStartDate' => $request->reportStartDate,
+            'reportEndDate' => $request->reportEndDate
+        ];
+
+        
+            $report = App::make(GetDisaggregatedReportAction::class)->patientList($data);
+
+        return response()->json(
+            [
+                'data' => $report
+            ]
+        );
+    }
+
+
     public function exportAgeDisaggregates(Request $request)
     {
         $data = [

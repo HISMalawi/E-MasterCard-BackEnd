@@ -231,7 +231,7 @@ class GetDisaggregatedReportAction
                   LEFT join obs rt on rt.person_id = p.person_id AND rt.concept_id = 55
                   WHERE i.identifier_type = 4 AND i.voided = 0 
                   and r.value_datetime BETWEEN '".$startDate."' AND '".$endDate."'
-                  HAVING r_type = 'First Time Initiation'";
+                  GROUP BY p.person_id HAVING r_type = 'First Time Initiation'";
                 break;
             case 'defaulted1Month':
                 $sql = "SELECT 
@@ -375,8 +375,8 @@ class GetDisaggregatedReportAction
 
     public function indicators ($data,$type){
 
-        //$results = DB::select(DB::raw($this->getSql($type,$data)));
-        $results = DB::select(\DB::raw($this->getSql($type, $data)))->groupBy(\DB::raw('p.person_id'))->get();
+        $results = DB::select(DB::raw($this->getSql($type,$data)));
+        //$results = DB::select(\DB::raw($this->getSql($type, $data)))->groupBy(\DB::raw('p.person_id'))->get();
         // adding mutually exclusive trick which doubles the processing speed
         $data = $this->getGenderDisaggregatedCount($results,"M","15-19");
         $fiften_ninteen = $data["Count"];

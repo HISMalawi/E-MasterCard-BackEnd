@@ -223,17 +223,15 @@ class GetDisaggregatedReportAction
                     and obs.value_datetime between '".$startDate."' AND '".$endDate."'";
                 break;
             case 'txNew':
-                $sql = "SELECT 
-                      distinct p.person_id ,
-                      TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, 
-                      i.identifier,t.value_text,  p.* 
-                    from person p 
-                    inner join patient_identifier i ON i.patient_id = p.person_id
-                    inner join obs on obs.person_id = p.person_id AND concept_id = 56
-                    inner join obs t on t.person_id = p.person_id AND t.concept_id = 55
-                    where obs.voided = 0 AND i.identifier_type = 4 
-                    AND (t.value_text = 'First Time Initiation' OR  t.value_text IS NULL) 
-                    and obs.value_datetime between '".$startDate."' AND '".$endDate."'";
+                $sql = "SELECT p.person_id ,p.birthdate, TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, 
+                    i.identifier, r.value_datetime, rt.value_text r_type, p.*
+                  FROM person p 
+                  inner join patient_identifier i ON i.patient_id = p.person_id
+                  LEFT join obs r on r.person_id = p.person_id AND r.concept_id = 56
+                  LEFT join obs rt on rt.person_id = p.person_id AND rt.concept_id = 55
+                  WHERE i.identifier_type = 4 AND i.voided = 0 
+                  and r.value_datetime BETWEEN '".$startDate."' AND '".$endDate."'
+                  HAVING r_type = 'First Time Initiation'";
                 break;
             case 'defaulted1Month':
                 $sql = "SELECT 
@@ -377,7 +375,8 @@ class GetDisaggregatedReportAction
 
     public function indicators ($data,$type){
 
-        $results = DB::select(DB::raw($this->getSql($type,$data)));
+        //$results = DB::select(DB::raw($this->getSql($type,$data)));
+        $results = DB::select(\DB::raw($this->getSql($type, $data)))->groupBy(\DB::raw('p.person_id'))->get();
         // adding mutually exclusive trick which doubles the processing speed
         $data = $this->getGenderDisaggregatedCount($results,"M","15-19");
         $fiften_ninteen = $data["Count"];

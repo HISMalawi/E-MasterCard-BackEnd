@@ -520,7 +520,7 @@ class GetDisaggregatedReportAction
         
         $txCur['total'] = $txCur['adults']['count'] + $txCur['pediatrics']['count'] + $unknowagetotal;
 
-        return $txCur;
+        return array("patientList"=>$results,"disagg"=>$txCur);
 
     }
 
@@ -534,13 +534,13 @@ class GetDisaggregatedReportAction
         if ($data['code'] == 1)
         {
             $disaggregatedReportPayload = [
-                'txCurrent' => $this->indicators($data,'txCurrent'),
-                'defaulted1Month' => $this->indicators($data,'defaulted1Month'),
-                'defaulted2Months' => $this->indicators($data,'defaulted2Months'),
-                'defaulted3MonthsPlus' => $this->indicators($data,'defaulted3MonthsPlus'),
-                'stopped' => $this->indicators($data,'stopped'),
-                'died' => $this->indicators($data,'died'),
-                'transferredOut' => $this->indicators($data,'transferredOut'), 
+                'txCurrent' => $this->indicators($data,'txCurrent')["disagg"],
+                'defaulted1Month' => $this->indicators($data,'defaulted1Month')["disagg"],
+                'defaulted2Months' => $this->indicators($data,'defaulted2Months')["disagg"],
+                'defaulted3MonthsPlus' => $this->indicators($data,'defaulted3MonthsPlus')["disagg"],
+                'stopped' => $this->indicators($data,'stopped')["disagg"],
+                'died' => $this->indicators($data,'died')["disagg"],
+                'transferredOut' => $this->indicators($data,'transferredOut')["disagg"], 
                 
                 
             ];
@@ -548,17 +548,31 @@ class GetDisaggregatedReportAction
         }elseif($data['code'] == 2)
         {
             $disaggregatedReportPayload = [
-                'txNew' => $this->indicators($data,'txNew'),
-                'reInitiated' => $this->indicators($data,'reInitiated'),
-                'transferredIn' => $this->indicators($data,'transferredIn'),
-                'defaulted1MonthPlus' => $this->indicators($data,'defaulted1Month'),
-                'defaulted2MonthsPlus' => $this->indicators($data,'defaulted2Months'),
-                'defaulted3MonthsPlus' => $this->indicators($data,'defaulted3MonthsPlus'),
-                'stopped' => $this->indicators($data,'stopped'),
-                'died' => $this->indicators($data,'died'),
-                'transferredOut' => $this->indicators($data,'transferredOut'),
+                'txNew' => $this->indicators($data,'txNew')["disagg"],
+                'reInitiated' => $this->indicators($data,'reInitiated')["disagg"],
+                'transferredIn' => $this->indicators($data,'transferredIn')["disagg"],
+                'defaulted1MonthPlus' => $this->indicators($data,'defaulted1Month')["disagg"],
+                'defaulted2MonthsPlus' => $this->indicators($data,'defaulted2Months')["disagg"],
+                'defaulted3MonthsPlus' => $this->indicators($data,'defaulted3MonthsPlus')["disagg"],
+                'stopped' => $this->indicators($data,'stopped')["disagg"],
+                'died' => $this->indicators($data,'died')["disagg"],
+                'transferredOut' => $this->indicators($data,'transferredOut')["disagg"],
             ];
         }
+
+        return $disaggregatedReportPayload;
+    }
+
+
+    public function patientList($data)
+    {
+        
+        $disaggregatedReportPayload = [
+            $data['type'] => $this->indicators($data,$data['type'])["patientList"]
+          
+        ];
+
+       
 
         return $disaggregatedReportPayload;
     }

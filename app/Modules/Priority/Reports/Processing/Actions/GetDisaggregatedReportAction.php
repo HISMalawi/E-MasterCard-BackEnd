@@ -194,7 +194,7 @@ class GetDisaggregatedReportAction
             case 'txCurrent':
                 $sql = "SELECT p.person_id, o.obs_datetime, o.value_text, (select max(value_datetime) from obs where person_id=p.person_id and concept_id=47) app,
                   TIMESTAMPDIFF(month, (select max(value_datetime) from obs where person_id=p.person_id and concept_id=47), date('".$endDate."')) diff,
-                  TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, p.*
+                  TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, p.gender, p.birthdate
                 FROM person p
                 LEFT join obs o ON o.person_id = p.person_id
                 LEFT JOIN obs r ON r.person_id = p.person_id AND r.concept_id = 56
@@ -207,7 +207,7 @@ class GetDisaggregatedReportAction
             case 'reInitiated':
                 $sql = "SELECT 
                       p.person_id , TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, 
-                      i.identifier,t.value_text,  p.* 
+                      i.identifier,t.value_text,  p.gender, p.birthdate
                     from person p 
                     inner join patient_identifier i ON i.patient_id = p.person_id
                     inner join obs on obs.person_id = p.person_id AND concept_id = 56
@@ -218,7 +218,7 @@ class GetDisaggregatedReportAction
                 break;
             case 'txNew':
                 $sql = "SELECT p.person_id ,p.birthdate, TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, 
-                    i.identifier, r.value_datetime, rt.value_text r_type, p.*
+                    i.identifier, r.value_datetime, rt.value_text r_type, p.gender, p.birthdate
                   FROM person p 
                   inner join patient_identifier i ON i.patient_id = p.person_id
                   LEFT join obs r on r.person_id = p.person_id AND r.concept_id = 56
@@ -230,7 +230,7 @@ class GetDisaggregatedReportAction
             case 'defaulted1Month':
                 $sql = "SELECT p.person_id, o.obs_datetime, o.value_text, (select max(value_datetime) from obs where person_id=p.person_id and concept_id=47) app,
                   TIMESTAMPDIFF(month, (select max(value_datetime) from obs where person_id=p.person_id and concept_id=47), date('".$endDate."')) diff,
-                  TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, p.*
+                  TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, p.gender, p.birthdate
                 FROM person p
                 LEFT join obs o ON o.person_id = p.person_id
                 WHERE o.concept_id=48 and o.obs_datetime <= '".$endDate."'
@@ -241,7 +241,7 @@ class GetDisaggregatedReportAction
             case 'defaulted2Months':
                 $sql = "SELECT p.person_id, o.obs_datetime, o.value_text, (select max(value_datetime) from obs where person_id=p.person_id and concept_id=47) app,
                   TIMESTAMPDIFF(month, (select max(value_datetime) from obs where person_id=p.person_id and concept_id=47), date('".$endDate."')) diff,
-                  TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, p.*
+                  TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, p.gender, p.birthdate
                 FROM person p
                 LEFT join obs o ON o.person_id = p.person_id
                 WHERE o.concept_id=48 and o.obs_datetime <= '".$endDate."'
@@ -252,7 +252,7 @@ class GetDisaggregatedReportAction
             case 'defaulted3MonthsPlus':
                 $sql = "SELECT p.person_id, o.obs_datetime, o.value_text, (select max(value_datetime) from obs where person_id=p.person_id and concept_id=47) app,
                   TIMESTAMPDIFF(month, (select max(value_datetime) from obs where person_id=p.person_id and concept_id=47), date('".$endDate."')) diff,
-                  TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, p.*
+                  TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, p.gender, p.birthdate
                 FROM person p
                 LEFT join obs o ON o.person_id = p.person_id
                 WHERE o.concept_id=48 and o.obs_datetime <= '".$endDate."'
@@ -263,7 +263,7 @@ class GetDisaggregatedReportAction
             case 'stopped':
                 $sql = "SELECT 
                       p.person_id ,
-                      TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, t.value_text,  p.* 
+                      TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, t.value_text,  p.gender, p.birthdate 
                     FROM person p 
                     inner join obs t on t.person_id = p.person_id 
                     AND t.concept_id = (SELECT concept_id FROM concept_name WHERE name = 'Adverse Outcome' LIMIT 1)
@@ -274,7 +274,7 @@ class GetDisaggregatedReportAction
             case 'died':
                 $sql = "SELECT 
                       p.person_id ,
-                      TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, t.value_text,  p.* 
+                      TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, t.value_text,  p.gender, p.birthdate
                     FROM person p 
                     inner join obs t on t.person_id = p.person_id 
                     AND t.concept_id = (SELECT concept_id FROM concept_name WHERE name = 'Adverse Outcome' LIMIT 1)
@@ -285,7 +285,7 @@ class GetDisaggregatedReportAction
             case 'transferredOut':
                 $sql = "SELECT 
                       p.person_id ,
-                      TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, t.value_text,  p.* 
+                      TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, t.value_text,  p.gender, p.birthdate
                     FROM person p 
                     inner join obs t on t.person_id = p.person_id 
                     AND t.concept_id = (SELECT concept_id FROM concept_name WHERE name = 'Adverse Outcome' LIMIT 1)
@@ -297,7 +297,7 @@ class GetDisaggregatedReportAction
                 $sql = "SELECT 
                       p.person_id , 
                       TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, 
-                      i.identifier,t.value_text,  p.* 
+                      i.identifier,t.value_text,  p.gender, p.birthdate
                     from person p 
                     inner join patient_identifier i ON i.patient_id = p.person_id
                     inner join obs on obs.person_id = p.person_id AND concept_id = 56

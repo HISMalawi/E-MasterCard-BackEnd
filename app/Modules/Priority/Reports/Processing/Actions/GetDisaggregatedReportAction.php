@@ -90,7 +90,7 @@ class GetDisaggregatedReportAction
             
             if($endAge !='')
             {
-                if($results[$i]->years >= $startAge && $results[$i]->years <= $endAge && $results[$i]->gender == $gender)
+                if($results[$i]->years >= $startAge && $results[$i]->years <= $endAge && $results[$i]->gender == $gender && $results[$i]->birthdate != '')
                 {
                     
                     $count = $count + 1;
@@ -104,7 +104,7 @@ class GetDisaggregatedReportAction
             else
             {
                 //greater than 50 years
-                if( $results[$i]->years >= $startAge && $results[$i]->gender == $gender)
+                if( $results[$i]->years >= $startAge && $results[$i]->gender == $gender && $results[$i]->birthdate != '')
                 {
                     $count = $count + 1;
                 }
@@ -479,7 +479,7 @@ class GetDisaggregatedReportAction
         $txCur['adults']['count'] = $txCur['adults']['males']['count'] + $txCur['adults']['females']['count'] ;
 
         //Correcting totals of peds      
-        $pedstotals = $this->calculategrouptotal($txCur['pediatrics']);;
+        $pedstotals = $this->calculategrouptotal($txCur['pediatrics']);
         $txCur['pediatrics']['males']['count'] = $pedstotals['males'];
         $txCur['pediatrics']['females']['count'] = $pedstotals['females'];
         $txCur['pediatrics']['count'] = $txCur['pediatrics']['males']['count'] + $txCur['pediatrics']['females']['count'] ;
@@ -488,6 +488,7 @@ class GetDisaggregatedReportAction
         $unknowagetotal = $txCur['unknownAge']['males'] +  $txCur['unknownAge']['females'];
         
         $txCur['total'] = $txCur['adults']['count'] + $txCur['pediatrics']['count'] + $unknowagetotal;
+        $txCur['unknownAge']['count'] = $unknowagetotal;
 
         return array("patientList"=>$results,"disagg"=>$txCur);
 

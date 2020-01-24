@@ -318,19 +318,20 @@ class GetDisaggregatedReportAction
                     GROUP BY p.person_id";
                 break;
             case  'everRegistared':
-              $sql  = "SELECT 
-                  i.identifier arv_number, r.value_datetime registration_date, p.birthdate, p.gender,
-                    TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years,
-                  o.value_text outcome, IF(o.value_text IS NULL, NULL, MAX(o.obs_datetime)) maximum_outcome_date,
-                    (SELECT left(MAX(obs_datetime),10) FROM obs WHERE person_id = p.person_id AND concept_id = 47) latest_next_appointment_date,
-                    p.person_id patient_id	
+              $sql = "SELECT i.identifier arv_number, p.gender, p.birthdate, 
+                  TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, 
+                  LEFT(r.value_datetime,10) reg_date, o.value_text outcome, 
+                  LEFT(o.obs_datetime,10) outcome_datetime, p.person_id patient_id
                 FROM person p 
-                LEFT JOIN patient_identifier i ON i.patient_id = p.person_id AND i.identifier_type = 4
+                INNER JOIN (
+                  SELECT * FROM patient_identifier 
+                    WHERE identifier_type = 4 AND identifier IS NOT NULL GROUP BY patient_id
+                ) AS i ON i.patient_id = p.person_id
+                LEFT JOIN obs r ON r.person_id = p.person_id AND r.concept_id = 56
                 LEFT JOIN obs o ON o.person_id = p.person_id AND o.concept_id = 48
-                INNER JOIN obs r ON r.person_id = p.person_id AND r.concept_id = 56
+                AND o.obs_datetime = (SELECT MAX(obs_datetime) FROM obs WHERE person_id = p.person_id AND concept_id = 48 AND obs_datetime <= '".$endDate."')
                 WHERE ((r.value_datetime BETWEEN '".$startDate."' AND '".$endDate."') OR r.value_datetime IS NULL)
-                AND p.voided = 0 AND i.voided = 0 AND p.voided = 0 AND o.voided = 0 AND r.voided = 0
-                GROUP BY p.person_id ORDER BY i.identifier";
+                GROUP BY i.patient_id ORDER BY i.identifier";
               break;            
             default:
                 # code...

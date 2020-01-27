@@ -237,7 +237,7 @@ class GetDisaggregatedReportAction
                 FROM person p
                 LEFT join obs o ON o.person_id = p.person_id
                 LEFT JOIN patient_identifier i ON i.patient_id = p.person_id AND i.identifier_type = 4
-                WHERE o.concept_id=48 and o.obs_datetime <= '".$endDate."'
+                WHERE o.concept_id=48 and o.obs_datetime BETWEEN '".$startDate."' AND '".$endDate."'
                 AND o.value_text IS NULL
                 GROUP BY p.person_id HAVING (diff > 1 AND diff <= 2) 
                 ORDER BY o.obs_datetime DESC";
@@ -250,7 +250,7 @@ class GetDisaggregatedReportAction
                 FROM person p
                 LEFT join obs o ON o.person_id = p.person_id
                 LEFT JOIN patient_identifier i ON i.patient_id = p.person_id AND i.identifier_type = 4
-                WHERE o.concept_id=48 and o.obs_datetime <= '".$endDate."'
+                WHERE o.concept_id=48 and o.obs_datetime BETWEEN '".$startDate."' AND '".$endDate."'
                 AND o.value_text IS NULL
                 GROUP BY p.person_id HAVING (diff > 2 AND diff <= 3) 
                 ORDER BY o.obs_datetime DESC";
@@ -263,7 +263,7 @@ class GetDisaggregatedReportAction
                 FROM person p
                 LEFT join obs o ON o.person_id = p.person_id
                 LEFT JOIN patient_identifier i ON i.patient_id = p.person_id AND i.identifier_type = 4
-                WHERE o.concept_id=48 and o.obs_datetime <= '".$endDate."'
+                WHERE o.concept_id=48 and o.obs_datetime BETWEEN '".$startDate."' AND '".$endDate."'
                 AND o.value_text not in('TO','D','Stop')
                 GROUP BY p.person_id HAVING diff > 3 OR value_text = 'Def'
                 ORDER BY o.obs_datetime DESC";
@@ -277,7 +277,7 @@ class GetDisaggregatedReportAction
                     AND t.concept_id = (SELECT concept_id FROM concept_name WHERE name = 'Adverse Outcome' LIMIT 1)
                     LEFT JOIN patient_identifier i ON i.patient_id = p.person_id AND i.identifier_type = 4
                     WHERE t.voided = 0 AND t.value_text = 'Stop'
-                    AND t.obs_datetime <= '".$endDate."'
+                    AND t.obs_datetime BETWEEN '".$startDate."' AND '".$endDate."'
                     GROUP BY p.person_id ORDER BY t.obs_datetime DESC";
                 break;
             case 'died':
@@ -289,7 +289,7 @@ class GetDisaggregatedReportAction
                     AND t.concept_id = (SELECT concept_id FROM concept_name WHERE name = 'Adverse Outcome' LIMIT 1)
                     LEFT JOIN patient_identifier i ON i.patient_id = p.person_id AND i.identifier_type = 4
                     WHERE t.voided = 0 AND t.value_text = 'D'
-                    AND t.obs_datetime <= '".$endDate."'
+                    AND t.obs_datetime BETWEEN '".$startDate."' AND '".$endDate."'
                     GROUP BY p.person_id ORDER BY t.obs_datetime DESC";
                 break;
             case 'transferredOut':
@@ -301,7 +301,7 @@ class GetDisaggregatedReportAction
                     AND t.concept_id = (SELECT concept_id FROM concept_name WHERE name = 'Adverse Outcome' LIMIT 1)
                     LEFT JOIN patient_identifier i ON i.patient_id = p.person_id AND i.identifier_type = 4
                     WHERE t.voided = 0 AND t.value_text = 'TO'
-                    AND t.obs_datetime <= '".$endDate."'
+                    AND t.obs_datetime BETWEEN '".$startDate."' AND '".$endDate."'
                     GROUP BY p.person_id ORDER BY t.obs_datetime DESC";
                 break;
             case 'transferredIn':

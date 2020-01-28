@@ -10,6 +10,7 @@ use App\Modules\Core\Observations\Observations;
 use App\Modules\Core\PatientCards\PatientCards;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\App;
+use App\Modules\Core\Encounters\Data\Repositories\EncounterRepository;
 
 class ProcessObservationsAction
 {
@@ -36,6 +37,15 @@ class ProcessObservationsAction
 
             if (count($newObservations) > 0)
             {
+                $typeId = $encounterType['encounter_type_id'];
+                if($typeId == 1){
+                    $encounterRepository = App::make(EncounterRepository::class);
+                    if($encounterRepository->patientHasEncounter($patient, $encounterType)){
+                        $encounterRepository
+                            ->voidEncounterById($patient, $encounterType); 
+                    }
+                }
+
                 if (isset($data['encounter-datetime']))
                     $encounterDatetime = Carbon::parse($data['encounter-datetime']);
                 else

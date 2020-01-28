@@ -48,9 +48,6 @@ class EncounterRepository {
     }
 
     public function voidEncounterById($patient, $encounterType){
-
-        error_log("Patient: " .$patient['patient_id']. " Encounter Type" . $encounterType['encounter_type_id']);
-
         return Encounter::where([
             ['patient_id', $patient['patient_id']],
             ['encounter_type', $encounterType['encounter_type_id']]
@@ -58,7 +55,6 @@ class EncounterRepository {
     }
 
     public function patientHasEncounter($patient, $encounterType){
-        error_log("patient has encounter type");
         return Encounter::where([
             ['patient_id', $patient['patient_id']],
             ['encounter_type', $encounterType['encounter_type_id']]

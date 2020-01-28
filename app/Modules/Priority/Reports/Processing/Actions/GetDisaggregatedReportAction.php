@@ -225,7 +225,10 @@ class GetDisaggregatedReportAction
                   inner join patient_identifier i ON i.patient_id = p.person_id
                   LEFT join obs r on r.person_id = p.person_id AND r.concept_id = 56
                   LEFT join obs rt on rt.person_id = p.person_id AND rt.concept_id = 55
-                  WHERE i.identifier_type = 4 AND i.voided = 0 
+                  inner join encounter e ON e.patient_id = p.person_id
+                  AND r.encounter_id = e.encounter_id
+                  AND e.encounter_type = 1 AND e.voided = 0
+                  WHERE i.identifier_type = 4
                   and r.value_datetime BETWEEN '".$startDate."' AND '".$endDate."'
                   GROUP BY p.person_id HAVING r_type = 'First Time Initiation'";
                 break;
@@ -318,20 +321,20 @@ class GetDisaggregatedReportAction
                     GROUP BY p.person_id";
                 break;
             case  'everRegistared':
-              $sql = "SELECT i.identifier arv_number, p.gender, p.birthdate, 
-                  TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, 
-                  LEFT(r.value_datetime,10) reg_date, o.value_text outcome, 
-                  LEFT(o.obs_datetime,10) outcome_datetime, p.person_id patient_id
-                FROM person p 
-                INNER JOIN (
-                  SELECT * FROM patient_identifier 
-                    WHERE identifier_type = 4 AND identifier IS NOT NULL GROUP BY patient_id
-                ) AS i ON i.patient_id = p.person_id
-                LEFT JOIN obs r ON r.person_id = p.person_id AND r.concept_id = 56
-                LEFT JOIN obs o ON o.person_id = p.person_id AND o.concept_id = 48
-                AND o.obs_datetime = (SELECT MAX(obs_datetime) FROM obs WHERE person_id = p.person_id AND concept_id = 48 AND obs_datetime <= '".$endDate."')
-                WHERE ((r.value_datetime BETWEEN '".$startDate."' AND '".$endDate."') OR r.value_datetime IS NULL)
-                GROUP BY i.patient_id ORDER BY i.identifier";
+                $sql = "SELECT i.identifier arv_number, p.gender, p.birthdate, 
+                TIMESTAMPDIFF(year, p.birthdate, date('".$endDate."')) years, 
+                LEFT(r.value_datetime,10) reg_date, o.value_text outcome, 
+                LEFT(o.obs_datetime,10) outcome_datetime, p.person_id patient_id
+              FROM person p 
+              INNER JOIN (
+                SELECT * FROM patient_identifier 
+                  WHERE identifier_type = 4 AND identifier IS NOT NULL GROUP BY patient_id
+              ) AS i ON i.patient_id = p.person_id
+              LEFT JOIN obs r ON r.person_id = p.person_id AND r.concept_id = 56
+              LEFT JOIN obs o ON o.person_id = p.person_id AND o.concept_id = 48
+              AND o.obs_datetime = (SELECT MAX(obs_datetime) FROM obs WHERE person_id = p.person_id AND concept_id = 48 AND obs_datetime <= '".$endDate."')
+              WHERE ((r.value_datetime BETWEEN '".$startDate."' AND '".$endDate."') OR r.value_datetime IS NULL)
+              GROUP BY i.patient_id ORDER BY i.identifier";
               break;            
             default:
                 # code...

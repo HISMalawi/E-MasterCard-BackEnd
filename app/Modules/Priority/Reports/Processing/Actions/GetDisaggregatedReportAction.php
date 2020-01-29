@@ -227,6 +227,7 @@ class GetDisaggregatedReportAction
                   LEFT join obs rt on rt.person_id = p.person_id AND rt.concept_id = 55
                   inner join encounter e ON e.patient_id = p.person_id
                   AND r.encounter_id = e.encounter_id
+                  AND rt.encounter_id = e.encounter_id
                   AND e.encounter_type = 1 AND e.voided = 0
                   WHERE i.identifier_type = 4
                   and r.value_datetime BETWEEN '".$startDate."' AND '".$endDate."'

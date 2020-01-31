@@ -199,7 +199,7 @@ class GetDisaggregatedReportAction
                 FROM person p
                 LEFT JOIN patient_identifier i ON i.patient_id = p.person_id AND i.identifier_type = 4
                 LEFT join obs o ON o.person_id = p.person_id
-                LEFT JOIN obs r ON r.person_id = p.person_id AND r.concept_id = 56
+                LEFT JOIN obs r ON r.person_id = p.person_id AND r.concept_id = 56 
                 WHERE o.concept_id=48 and o.obs_datetime <= '".$endDate."'
                 AND o.value_text IS NULL
                 and r.value_datetime between '".$startDate."' AND '".$endDate."'
@@ -214,6 +214,10 @@ class GetDisaggregatedReportAction
                     inner join patient_identifier i ON i.patient_id = p.person_id
                     inner join obs on obs.person_id = p.person_id AND concept_id = 56
                     inner join obs t on t.person_id = p.person_id AND t.concept_id = 55
+                    inner join encounter e ON e.patient_id = p.person_id
+                    AND obs.encounter_id = e.encounter_id
+                    AND t.encounter_id = e.encounter_id
+                    AND e.encounter_type = 1 AND e.voided = 0
                     where obs.voided = 0 AND i.identifier_type = 4 AND t.value_text = 'Reinitiation'
                     and obs.value_datetime between '".$startDate."' AND '".$endDate."'
                     GROUP BY p.person_id";
@@ -317,6 +321,10 @@ class GetDisaggregatedReportAction
                     inner join patient_identifier i ON i.patient_id = p.person_id
                     inner join obs on obs.person_id = p.person_id AND concept_id = 56
                     inner join obs t on t.person_id = p.person_id AND t.concept_id = 55
+                    inner join encounter e ON e.patient_id = p.person_id
+                    AND obs.encounter_id = e.encounter_id
+                    AND t.encounter_id = e.encounter_id
+                    AND e.encounter_type = 1 AND e.voided = 0
                     where obs.voided = 0 AND i.identifier_type = 4 AND t.value_text = 'Transfer In' 
                     and obs.value_datetime between '".$startDate."' AND '".$endDate."'
                     GROUP BY p.person_id";

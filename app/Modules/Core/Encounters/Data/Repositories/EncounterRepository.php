@@ -46,4 +46,18 @@ class EncounterRepository {
 
         return $encounter;
     }
+
+    public function voidEncounterById($patient, $encounterType){
+        return Encounter::where([
+            ['patient_id', $patient['patient_id']],
+            ['encounter_type', $encounterType['encounter_type_id']]
+        ])->update(['voided' => 1]);
+    }
+
+    public function patientHasEncounter($patient, $encounterType){
+        return Encounter::where([
+            ['patient_id', $patient['patient_id']],
+            ['encounter_type', $encounterType['encounter_type_id']]
+        ])->exists();
+    }
 }

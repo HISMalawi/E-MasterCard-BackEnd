@@ -245,6 +245,9 @@ class GetDisaggregatedReportAction
                 FROM person p
                 LEFT join obs o ON o.person_id = p.person_id
                 LEFT JOIN patient_identifier i ON i.patient_id = p.person_id AND i.identifier_type = 4
+                INNER JOIN encounter e ON e.patient_id = p.person_id
+                AND e.patient_id = o.person_id 
+                AND e.patient_id = i.patient_id AND e.voided = 0
                 WHERE o.concept_id=48 and o.obs_datetime <= '".$endDate."'
                 AND o.value_text IS NULL
                 GROUP BY p.person_id HAVING (diff > 1 AND diff <= 2) 
@@ -258,6 +261,9 @@ class GetDisaggregatedReportAction
                 FROM person p
                 LEFT join obs o ON o.person_id = p.person_id
                 LEFT JOIN patient_identifier i ON i.patient_id = p.person_id AND i.identifier_type = 4
+                INNER JOIN encounter e ON e.patient_id = p.person_id
+                AND e.patient_id = o.person_id 
+                AND e.patient_id = i.patient_id AND e.voided = 0
                 WHERE o.concept_id=48 and o.obs_datetime <= '".$endDate."'
                 AND o.value_text IS NULL
                 GROUP BY p.person_id HAVING (diff > 2 AND diff <= 3) 
@@ -271,6 +277,9 @@ class GetDisaggregatedReportAction
                 FROM person p
                 LEFT join obs o ON o.person_id = p.person_id
                 LEFT JOIN patient_identifier i ON i.patient_id = p.person_id AND i.identifier_type = 4
+                INNER JOIN encounter e ON e.patient_id = p.person_id
+                AND e.patient_id = o.person_id 
+                AND e.patient_id = i.patient_id AND e.voided = 0
                 WHERE o.concept_id=48 and o.obs_datetime <= '".$endDate."'
                 AND o.value_text not in('TO','D','Stop')
                 GROUP BY p.person_id HAVING diff > 3 OR value_text = 'Def'
@@ -284,6 +293,9 @@ class GetDisaggregatedReportAction
                     inner join obs t on t.person_id = p.person_id 
                     AND t.concept_id = (SELECT concept_id FROM concept_name WHERE name = 'Adverse Outcome' LIMIT 1)
                     LEFT JOIN patient_identifier i ON i.patient_id = p.person_id AND i.identifier_type = 4
+                    INNER JOIN encounter e ON e.patient_id = p.person_id
+                    AND e.patient_id = t.person_id 
+                    AND e.patient_id = i.patient_id AND e.voided = 0
                     WHERE t.voided = 0 AND t.value_text = 'Stop'
                     AND t.obs_datetime <= '".$endDate."'
                     GROUP BY p.person_id ORDER BY t.obs_datetime DESC";
@@ -296,6 +308,9 @@ class GetDisaggregatedReportAction
                     inner join obs t on t.person_id = p.person_id 
                     AND t.concept_id = (SELECT concept_id FROM concept_name WHERE name = 'Adverse Outcome' LIMIT 1)
                     LEFT JOIN patient_identifier i ON i.patient_id = p.person_id AND i.identifier_type = 4
+                    INNER JOIN encounter e ON e.patient_id = p.person_id
+                    AND e.patient_id = t.person_id 
+                    AND e.patient_id = i.patient_id AND e.voided = 0
                     WHERE t.voided = 0 AND t.value_text = 'D'
                     AND t.obs_datetime <= '".$endDate."'
                     GROUP BY p.person_id ORDER BY t.obs_datetime DESC";
@@ -308,6 +323,9 @@ class GetDisaggregatedReportAction
                     inner join obs t on t.person_id = p.person_id 
                     AND t.concept_id = (SELECT concept_id FROM concept_name WHERE name = 'Adverse Outcome' LIMIT 1)
                     LEFT JOIN patient_identifier i ON i.patient_id = p.person_id AND i.identifier_type = 4
+                    INNER JOIN encounter e ON e.patient_id = p.person_id
+                    AND e.patient_id = t.person_id 
+                    AND e.patient_id = i.patient_id AND e.voided = 0
                     WHERE t.voided = 0 AND t.value_text = 'TO'
                     AND t.obs_datetime <= '".$endDate."'
                     GROUP BY p.person_id ORDER BY t.obs_datetime DESC";
@@ -341,6 +359,10 @@ class GetDisaggregatedReportAction
               ) AS i ON i.patient_id = p.person_id
               LEFT JOIN obs r ON r.person_id = p.person_id AND r.concept_id = 56
               LEFT JOIN obs o ON o.person_id = p.person_id AND o.concept_id = 48
+              INNER join encounter e ON e.patient_id = p.person_id
+              AND r.encounter_id = e.encounter_id
+              AND o.encounter_id = e.encounter_id
+              AND e.encounter_type = 1 AND e.voided = 0
               AND o.obs_datetime = (SELECT MAX(obs_datetime) FROM obs WHERE person_id = p.person_id AND concept_id = 48 AND obs_datetime <= '".$endDate."')
               WHERE ((r.value_datetime BETWEEN '".$startDate."' AND '".$endDate."') OR r.value_datetime IS NULL)
               GROUP BY i.patient_id ORDER BY i.identifier";

@@ -16,9 +16,9 @@ class CreateObservationTable extends Migration
     {
         Schema::create('obs', function (Blueprint $table) {
             $table->increments('obs_id');
-            $table->integer('person_id')->unsigned();
-            $table->integer('concept_id')->unsigned()->default(0);
-            $table->integer('encounter_id')->unsigned()->nullable();
+            $table->integer('person_id')->unsigned()->index();
+            $table->integer('concept_id')->unsigned()->default(0)->index();
+            $table->integer('encounter_id')->unsigned()->nullable()->index();
             $table->integer('order_id')->unsigned()->nullable();
             $table->dateTime('obs_datetime');
             $table->integer('location_id')->nullable();
@@ -47,6 +47,21 @@ class CreateObservationTable extends Migration
 
             $table->string('value_complex')->nullable();
             $table->string('uuid', 38)->unique();
+
+            $table->foreign('encounter_id')
+                ->references('encounter_id')
+                ->on('encounter')
+                ->onDelete('restrict');
+
+            $table->foreign('concept_id')
+                ->references('concept_id')
+                ->on('concept')
+                ->onDelete('restrict');
+
+            $table->foreign('person_id')
+                ->references('person_id')
+                ->on('person')
+                ->onDelete('restrict');
         });
 
         DB::statement("CREATE VIEW  visit_outcome_event AS
@@ -142,7 +157,7 @@ class CreateObservationTable extends Migration
                             o.gender,
                             o.encounter_datetime,
                             o.voided,
-                            o.registration_age,
+                            TIMESTAMPDIFF(YEAR, o.birthdate, e6.value_datetime)  AS \"registration_age\",
                         
                             e1.value_datetime AS \"transfer_in_date\",
                             e2.value_text AS \"art_reg_no\",
@@ -156,7 +171,7 @@ class CreateObservationTable extends Migration
                         
                             FROM
                             (SELECT DISTINCT
-                            a.person_id, a.encounter_id, p.birthdate,p.gender,b.encounter_datetime, b.voided, timestampdiff(Year,'e6.value_datetime','p.birthdate') as registration_age
+                            a.person_id, a.encounter_id, p.birthdate,p.gender,b.encounter_datetime, b.voided
                             FROM
                             obs a join encounter b on a.encounter_id = b.encounter_id join encounter_type c on c.encounter_type_id = b.encounter_type join person p on p.person_id = a.person_id  where c.encounter_type_id = 1
                             ) o

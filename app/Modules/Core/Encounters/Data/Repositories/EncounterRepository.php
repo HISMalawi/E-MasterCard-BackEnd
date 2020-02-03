@@ -7,6 +7,7 @@ use App\Modules\Core\EncounterTypes\Data\Models\EncounterType;
 use App\Modules\Core\Patients\Data\Models\Patient;
 use App\Modules\Core\Persons\Data\Models\Person;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class EncounterRepository {
 
@@ -45,5 +46,65 @@ class EncounterRepository {
         $encounter->update($data);
 
         return $encounter;
+    }
+
+    public function voidEncounterById($patient, $encounterType){
+        return Encounter::where([
+            ['patient_id', $patient['patient_id']],
+            ['encounter_type', $encounterType['encounter_type_id']]
+        ])->update(['voided' => 1]);
+    }
+
+    public function patientHasEncounter($patient, $encounterType){
+        return Encounter::where([
+            ['patient_id', $patient['patient_id']],
+            ['encounter_type', $encounterType['encounter_type_id']]
+        ])->exists();
+    }
+
+    public function findEncounterById($patient, $encounterType){
+        return Encounter::where([
+            ['patient_id', $patient['patient_id']],
+            ['encounter_type', $encounterType['encounter_type_id']]
+        ])
+        ->latest('encounter_id', 'ASC')
+        ->first();
+    }
+
+    public function voidEncounterByIdConceptId($params){
+
+        $encounters = DB::table('encounter')
+            ->join('visit_outcome_event', 'encounter.encounter_id', '=', 'visit_outcome_event.encounter_id')
+            ->join('obs', 'encounter.encounter_id', '=', 'obs.encounter_id')
+            ->where([
+                ['encounter.patient_id', $params['patient']],
+                ['encounter.encounter_type', $params['type']]
+            ])->whereIn('obs.concept_id', [$params['concepts']])
+            ->update(['encounter.voided' => 1]); 
+
+    }
+
+    public function findRecentEncounterByType($params){
+        return DB::table('encounter')
+            ->join('visit_outcome_event', 'encounter.encounter_id', '=', 'visit_outcome_event.encounter_id')
+            ->join('obs', 'encounter.encounter_id', '=', 'obs.encounter_id')
+            ->where([
+                ['encounter.patient_id', $params['patient']],
+                ['encounter.encounter_type', $params['type']]
+            ])
+            ->whereIn('obs.concept_id', [$params['concepts']])
+            ->latest('encounter.encounter_id', 'DESC')
+            ->first();
+    }
+
+    public function unVoidEncounterById($params){
+
+        return Encounter::where([
+            ['patient_id', $params['params']['patient']],
+            ['encounter_id', $params['unvoid_encounter_id']],
+            ['encounter_type', $params['params']['type']]
+        ])
+        ->update(['voided' => 0]);
+
     }
 }

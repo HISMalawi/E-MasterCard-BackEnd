@@ -14,16 +14,16 @@ class GetAdverseOutcomeDisAggReportSubAction
     {
         $parsedReportDate = Carbon::parse($reportDate);
         ### STILL UNDER WORKS TO SORT BY VISIT DATE ######
-        $lastVisitEncounterIDs = App::make(GetLastVisitEncounterTask::class)->run3();
+        $lastVisitEncounterIDs = App::make(GetLastVisitEncounterTask::class)->run3($parsedReportDate);
 
         $eventsQuery = DB::table('visit_outcome_event')
             ->whereIn('encounter_id', $lastVisitEncounterIDs)
             ->whereNotNull('adverse_outcome')
             ->whereNotNull('encounter_datetime');
 
-        if ($type == 'Stopped')
+        if ($type == 'stopped')
             $eventsQuery->where('adverse_outcome','Stop');
-        elseif ($type == 'Died')
+        elseif ($type == 'died')
             $eventsQuery->where('adverse_outcome','D');
         else
             $eventsQuery->where('adverse_outcome','To');
@@ -39,16 +39,16 @@ class GetAdverseOutcomeDisAggReportSubAction
         $parsedReportEndDate = Carbon::parse($reportEndDate);
 
         ### STILL UNDER WORKS TO SORT BY VISIT DATE ######
-        $lastVisitEncounterIDs = App::make(GetLastVisitEncounterTask::class)->run3();
+        $lastVisitEncounterIDs = App::make(GetLastVisitEncounterTask::class)->run3($parsedReportEndDate);
 
         $eventsQuery = DB::table('visit_outcome_event')
             ->whereIn('encounter_id', $lastVisitEncounterIDs)
             ->whereNotNull('adverse_outcome')
             ->whereNotNull('encounter_datetime');
 
-        if ($type == 'Stopped')
+        if ($type == 'stopped')
             $eventsQuery->where('adverse_outcome','Stop');
-        elseif ($type == 'Died')
+        elseif ($type == 'died')
             $eventsQuery->where('adverse_outcome','D');
         else
             $eventsQuery->where('adverse_outcome','To');

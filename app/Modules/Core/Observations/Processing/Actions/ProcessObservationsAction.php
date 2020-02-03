@@ -10,6 +10,7 @@ use App\Modules\Core\Observations\Observations;
 use App\Modules\Core\PatientCards\PatientCards;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\App;
+use App\Modules\Core\Encounters\Data\Repositories\EncounterRepository;
 
 class ProcessObservationsAction
 {
@@ -36,6 +37,15 @@ class ProcessObservationsAction
 
             if (count($newObservations) > 0)
             {
+                $typeId = $encounterType['encounter_type_id'];
+                if($typeId == 1){
+                    $encounterRepository = App::make(EncounterRepository::class);
+                    if($encounterRepository->patientHasEncounter($patient, $encounterType)){
+                        $encounterRepository
+                            ->voidEncounterById($patient, $encounterType); 
+                    }
+                }
+
                 if (isset($data['encounter-datetime']))
                     $encounterDatetime = Carbon::parse($data['encounter-datetime']);
                 else
@@ -71,6 +81,32 @@ class ProcessObservationsAction
 
                     $observationRepo->update($value, $observation, $concept);
                 }
+            }
+        }
+
+        $typeId = $encounterType['encounter_type_id'];
+        if($typeId == 4){
+            $encounterRepository = App::make(EncounterRepository::class);
+            if($encounterRepository->patientHasEncounter($patient, $encounterType)){
+
+                $params = [
+                    "type" => $typeId,
+                    "patient" => $patient['patient_id'],
+                    "concepts" => [32, 47],
+                ];
+
+                $encounterRepository-> 
+                    voidEncounterByIdConceptId($params);
+
+                $unvoided = $encounterRepository->findRecentEncounterByType($params);
+
+                $unvoidParams = [
+                    "params" => $params,
+                    "unvoid_encounter_id" => $unvoided->encounter_id
+                ];
+
+                $encounterRepository->unVoidEncounterById($unvoidParams);
+
             }
         }
     }

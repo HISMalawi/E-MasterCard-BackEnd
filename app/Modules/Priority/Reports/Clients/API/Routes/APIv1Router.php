@@ -59,6 +59,11 @@ class APIv1Router
                 'uses' => 'ReportAPIController@getAgeDisaggregates',
             ]);
 
+            $router->get('/age-disaggregates-patient-list', [
+                'as' => 'age_disaggregates',
+                'uses' => 'ReportAPIController@getAgeDisaggregatesPatientList',
+            ]);
+
             $router->get('/age-disaggregates/export', [
                 'as' => 'age_disaggregates.export',
                 'uses' => 'ReportAPIController@exportAgeDisaggregates',

@@ -12,16 +12,16 @@ class GetTxCurrentDisAggReportSubAction
 {
     public function run($reportDate)
     {
-        dd('1');
         $parsedReportDate = Carbon::parse($reportDate);
         ### STILL UNDER WORKS TO SORT BY VISIT DATE ######
-        $lastVisitEncounterIDs = App::make(GetLastVisitEncounterTask::class)->run3();
+        $lastVisitEncounterIDs = App::make(GetLastVisitEncounterTask::class)->run3($parsedReportDate);
 
         $eventsQuery = DB::table('visit_outcome_event')
                                 ->whereIn('encounter_id', $lastVisitEncounterIDs)
                                 ->whereNull('adverse_outcome')
                                 ->whereNotNull('next_appointment_date')
-                                ->whereDate('next_appointment_date', '>', $parsedReportDate->subDays(30));
+                                ->whereDate('encounter_datetime', '<=', $parsedReportDate)
+                                ->whereDate('next_appointment_date', '>', with(clone $parsedReportDate)->subDays(30));
 
         return App::make(GetDisaggregatesTask::class)->run($eventsQuery, $parsedReportDate);
     }

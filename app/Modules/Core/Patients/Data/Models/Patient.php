@@ -6,10 +6,12 @@ use App\Modules\Core\Encounters\Data\Models\Encounter;
 use App\Modules\Core\Observations\Data\Models\Observation;
 use App\Modules\Core\PatientCards\Data\Models\PatientCard;
 use App\Modules\Core\PatientIdentifiers\Data\Models\PatientIdentifier;
-use App\Modules\Core\PatientSteps\Data\Models\PatientStep;
 use App\Modules\Core\Persons\Data\Models\Person;
 use App\Modules\Priority\ActivityLogs\ActivityLogs;
+use App\Modules\Priority\Settings\Settings;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Patient extends Model
 {
@@ -21,7 +23,7 @@ class Patient extends Model
 
     public $incrementing = false;
 
-    protected $fillable = ['guardian_name', 'patient_phone','guardian_phone', 'follow_up', 'guardian_relation'];
+    protected $fillable = ['guardian_name', 'patient_phone','guardian_phone', 'follow_up', 'guardian_relation', 'soldier'];
 
     public function person()
     {
@@ -48,9 +50,29 @@ class Patient extends Model
         return $this->hasMany(PatientIdentifier::class, 'patient_id');
     }
 
+    public function getFullArtNumberAttribute()
+    {
+        $identifier = $this->patientIdentifiers->last()?$this->patientIdentifiers->last()->identifier:null;
+
+        if(!is_null($identifier))
+        {
+            $identifier = Settings::repository()->get(1)->options['code'].$identifier;
+        }
+        return $identifier;
+    }
+
     public function getArtNumberAttribute()
     {
-        return $this->patientIdentifiers->last()?$this->patientIdentifiers->last()->identifier:null;
+        $identifier = $this->patientIdentifiers->last()?$this->patientIdentifiers->last()->identifier:null;
+
+        return $identifier;
+    }
+
+    public function getPatientIdentifierIDAttribute()
+    {
+        $identifierID = $this->patientIdentifiers->last()?$this->patientIdentifiers->last()->patient_identifier_id:null;
+
+        return $identifierID;
     }
 
 //    public function getLastVisitDateAttribute()
@@ -71,6 +93,16 @@ class Patient extends Model
     public static function boot()
     {
         parent::boot();
+
+        static::creating(function ($instance) {
+            $instance->creator = Auth::user()->user_id;
+            $instance->date_created = Carbon::now();
+        });
+
+        static::updating(function ($instance) {
+            $instance->changed_by = Auth::user()->user_id;
+            $instance->date_changed = Carbon::now();
+        });
 
         static::created(function ($instance) {
             ActivityLogs::create('Created','Patient created Successfully!',$instance, 'Patient');

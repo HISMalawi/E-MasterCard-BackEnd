@@ -7,6 +7,7 @@ use App\Modules\Core\Encounters\Data\Models\Encounter;
 use App\Modules\Core\Persons\Data\Models\Person;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Observation extends Model
 {
@@ -58,6 +59,8 @@ class Observation extends Model
 
         static::creating(function ($instance) {
             $instance->uuid = uuid4();
+            $instance->creator = Auth::user()->user_id;
+            $instance->date_created = Carbon::now();
         });
     }
 

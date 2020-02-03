@@ -83,6 +83,32 @@ class ProcessObservationsAction
                 }
             }
         }
+
+        $typeId = $encounterType['encounter_type_id'];
+        if($typeId == 4){
+            $encounterRepository = App::make(EncounterRepository::class);
+            if($encounterRepository->patientHasEncounter($patient, $encounterType)){
+
+                $params = [
+                    "type" => $typeId,
+                    "patient" => $patient['patient_id'],
+                    "concepts" => [32, 47],
+                ];
+
+                $encounterRepository-> 
+                    voidEncounterByIdConceptId($params);
+
+                $unvoided = $encounterRepository->findRecentEncounterByType($params);
+
+                $unvoidParams = [
+                    "params" => $params,
+                    "unvoid_encounter_id" => $unvoided->encounter_id
+                ];
+
+                $encounterRepository->unVoidEncounterById($unvoidParams);
+
+            }
+        }
     }
 
     private function array_group_by($key, $data) {

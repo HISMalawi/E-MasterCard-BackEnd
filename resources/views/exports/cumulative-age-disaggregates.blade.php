@@ -8,7 +8,7 @@
         <th>Stopped</th>
         <th>Died</th>
         <th>Transferred Out</th>
-        <th>To</th>
+        <th>Total</th>
     </tr>
     <tr>
         <th></th>
@@ -34,7 +34,7 @@
         <th>{{$data['stopped']['total']}}</th>
         <th>{{$data['died']['total']}}</th>
         <th>{{$data['transferredOut']['total']}}</th>
-        <th>{{$data['txCurrent']['total']+$data['defaulted1Month']['total']+$data['defaulted2Months']['total']+$data['defaulted3MonthsPlus']['total']+$data['stopped']['total']+$data['died']['total']+$data['transferredOut']['total']}}</th>
+        <th>{{$data['everRegistared']['total']}}</th>
     </tr>
     <tr>
         <th>Adults</th>
@@ -46,7 +46,7 @@
         <th>{{$data['stopped']['adults']['count']}}</th>
         <th>{{$data['died']['adults']['count']}}</th>
         <th>{{$data['transferredOut']['adults']['count']}}</th>
-        <th>{{$data['txCurrent']['adults']['count']+$data['defaulted1Month']['adults']['count']+$data['defaulted2Months']['adults']['count']+$data['defaulted3MonthsPlus']['adults']['count']+$data['stopped']['adults']['count']+$data['died']['adults']['count']+$data['transferredOut']['adults']['count']}}</th>
+        <th>{{$data['everRegistared']['adults']['count']}}</th>
     </tr>
     <tr>
         <th>Males</th>
@@ -58,7 +58,7 @@
         <th>{{$data['stopped']['adults']['males']['count']}}</th>
         <th>{{$data['died']['adults']['males']['count']}}</th>
         <th>{{$data['transferredOut']['adults']['males']['count']}}</th>
-        <th>{{$data['txCurrent']['adults']['males']['count']+$data['defaulted1Month']['adults']['males']['count']+$data['defaulted2Months']['adults']['males']['count']+$data['defaulted3MonthsPlus']['adults']['males']['count']+$data['stopped']['adults']['males']['count']+$data['died']['adults']['males']['count']+$data['transferredOut']['adults']['males']['count']}}</th>
+        <th>{{$data['everRegistared']['adults']['males']['count']}}</th>
     </tr>
     <tr>
         <th></th>
@@ -70,7 +70,7 @@
         <th>{{$data['stopped']['adults']['males']['disaggregatedByAge']['15-19']}}</th>
         <th>{{$data['died']['adults']['males']['disaggregatedByAge']['15-19']}}</th>
         <th>{{$data['transferredOut']['adults']['males']['disaggregatedByAge']['15-19']}}</th>
-        <th>{{$data['txCurrent']['adults']['males']['disaggregatedByAge']['15-19']+$data['defaulted1Month']['adults']['males']['disaggregatedByAge']['15-19']+$data['defaulted2Months']['adults']['males']['disaggregatedByAge']['15-19']+$data['defaulted3MonthsPlus']['adults']['males']['disaggregatedByAge']['15-19']+$data['stopped']['adults']['males']['disaggregatedByAge']['15-19']+$data['died']['adults']['males']['disaggregatedByAge']['15-19']+$data['transferredOut']['adults']['males']['disaggregatedByAge']['15-19']}}</th>
+        <th>{{$data['everRegistared']['adults']['males']['disaggregatedByAge']['15-19']}}</th>
     </tr>
     <tr>
         <th></th>
@@ -82,7 +82,7 @@
         <th>{{$data['stopped']['adults']['males']['disaggregatedByAge']['20-24']}}</th>
         <th>{{$data['died']['adults']['males']['disaggregatedByAge']['20-24']}}</th>
         <th>{{$data['transferredOut']['adults']['males']['disaggregatedByAge']['20-24']}}</th>
-        <th>{{$data['txCurrent']['adults']['males']['disaggregatedByAge']['20-24']+$data['defaulted1Month']['adults']['males']['disaggregatedByAge']['20-24']+$data['defaulted2Months']['adults']['males']['disaggregatedByAge']['20-24']+$data['defaulted3MonthsPlus']['adults']['males']['disaggregatedByAge']['20-24']+$data['stopped']['adults']['males']['disaggregatedByAge']['20-24']+$data['died']['adults']['males']['disaggregatedByAge']['20-24']+$data['transferredOut']['adults']['males']['disaggregatedByAge']['20-24']}}</th>
+        <th>{{$data['everRegistared']['adults']['males']['disaggregatedByAge']['20-24']}}</th>
     </tr>
     <tr>
         <th></th>
@@ -94,7 +94,7 @@
         <th>{{$data['stopped']['adults']['males']['disaggregatedByAge']['25-29']}}</th>
         <th>{{$data['died']['adults']['males']['disaggregatedByAge']['25-29']}}</th>
         <th>{{$data['transferredOut']['adults']['males']['disaggregatedByAge']['25-29']}}</th>
-        <th>{{$data['txCurrent']['adults']['males']['disaggregatedByAge']['25-29']+$data['defaulted1Month']['adults']['males']['disaggregatedByAge']['25-29']+$data['defaulted2Months']['adults']['males']['disaggregatedByAge']['25-29']+$data['defaulted3MonthsPlus']['adults']['males']['disaggregatedByAge']['25-29']+$data['stopped']['adults']['males']['disaggregatedByAge']['25-29']+$data['died']['adults']['males']['disaggregatedByAge']['25-29']+$data['transferredOut']['adults']['males']['disaggregatedByAge']['25-29']}}</th>
+        <th>{{$data['everRegistared']['adults']['males']['disaggregatedByAge']['25-29']}}</th>
     </tr>
 
     <tr>
@@ -107,7 +107,7 @@
         <th>{{$data['stopped']['adults']['males']['disaggregatedByAge']['30-34']}}</th>
         <th>{{$data['died']['adults']['males']['disaggregatedByAge']['30-34']}}</th>
         <th>{{$data['transferredOut']['adults']['males']['disaggregatedByAge']['30-34']}}</th>
-        <th>{{$data['txCurrent']['adults']['males']['disaggregatedByAge']['30-34']+$data['defaulted1Month']['adults']['males']['disaggregatedByAge']['30-34']+$data['defaulted2Months']['adults']['males']['disaggregatedByAge']['30-34']+$data['defaulted3MonthsPlus']['adults']['males']['disaggregatedByAge']['30-34']+$data['stopped']['adults']['males']['disaggregatedByAge']['30-34']+$data['died']['adults']['males']['disaggregatedByAge']['30-34']+$data['transferredOut']['adults']['males']['disaggregatedByAge']['30-34']}}</th>
+        <th>{{$data['everRegistared']['adults']['males']['disaggregatedByAge']['30-34']}}</th>
     </tr>
 
     <tr>
@@ -120,7 +120,7 @@
         <th>{{$data['stopped']['adults']['males']['disaggregatedByAge']['35-39']}}</th>
         <th>{{$data['died']['adults']['males']['disaggregatedByAge']['35-39']}}</th>
         <th>{{$data['transferredOut']['adults']['males']['disaggregatedByAge']['35-39']}}</th>
-        <th>{{$data['txCurrent']['adults']['males']['disaggregatedByAge']['35-39']+$data['defaulted1Month']['adults']['males']['disaggregatedByAge']['35-39']+$data['defaulted2Months']['adults']['males']['disaggregatedByAge']['35-39']+$data['defaulted3MonthsPlus']['adults']['males']['disaggregatedByAge']['35-39']+$data['stopped']['adults']['males']['disaggregatedByAge']['35-39']+$data['died']['adults']['males']['disaggregatedByAge']['35-39']+$data['transferredOut']['adults']['males']['disaggregatedByAge']['35-39']}}</th>
+        <th>{{$data['everRegistared']['adults']['males']['disaggregatedByAge']['35-39']}}</th>
     </tr>
 
     <tr>
@@ -133,7 +133,7 @@
         <th>{{$data['stopped']['adults']['males']['disaggregatedByAge']['40-44']}}</th>
         <th>{{$data['died']['adults']['males']['disaggregatedByAge']['40-44']}}</th>
         <th>{{$data['transferredOut']['adults']['males']['disaggregatedByAge']['40-44']}}</th>
-        <th>{{$data['txCurrent']['adults']['males']['disaggregatedByAge']['40-44']+$data['defaulted1Month']['adults']['males']['disaggregatedByAge']['40-44']+$data['defaulted2Months']['adults']['males']['disaggregatedByAge']['40-44']+$data['defaulted3MonthsPlus']['adults']['males']['disaggregatedByAge']['40-44']+$data['stopped']['adults']['males']['disaggregatedByAge']['40-44']+$data['died']['adults']['males']['disaggregatedByAge']['40-44']+$data['transferredOut']['adults']['males']['disaggregatedByAge']['40-44']}}</th>
+        <th>{{$data['everRegistared']['adults']['males']['disaggregatedByAge']['40-44']}}</th>
     </tr>
 
     <tr>
@@ -146,7 +146,7 @@
         <th>{{$data['stopped']['adults']['males']['disaggregatedByAge']['45-49']}}</th>
         <th>{{$data['died']['adults']['males']['disaggregatedByAge']['45-49']}}</th>
         <th>{{$data['transferredOut']['adults']['males']['disaggregatedByAge']['45-49']}}</th>
-        <th>{{$data['txCurrent']['adults']['males']['disaggregatedByAge']['45-49']+$data['defaulted1Month']['adults']['males']['disaggregatedByAge']['45-49']+$data['defaulted2Months']['adults']['males']['disaggregatedByAge']['45-49']+$data['defaulted3MonthsPlus']['adults']['males']['disaggregatedByAge']['45-49']+$data['stopped']['adults']['males']['disaggregatedByAge']['45-49']+$data['died']['adults']['males']['disaggregatedByAge']['45-49']+$data['transferredOut']['adults']['males']['disaggregatedByAge']['45-49']}}</th>
+        <th>{{$data['everRegistared']['adults']['males']['disaggregatedByAge']['45-49']}}</th>
     </tr>
     <tr>
         <th></th>
@@ -158,7 +158,7 @@
         <th>{{$data['stopped']['adults']['males']['disaggregatedByAge']['50+']}}</th>
         <th>{{$data['died']['adults']['males']['disaggregatedByAge']['50+']}}</th>
         <th>{{$data['transferredOut']['adults']['males']['disaggregatedByAge']['50+']}}</th>
-        <th>{{$data['txCurrent']['adults']['males']['disaggregatedByAge']['50+']+$data['defaulted1Month']['adults']['males']['disaggregatedByAge']['50+']+$data['defaulted2Months']['adults']['males']['disaggregatedByAge']['50+']+$data['defaulted3MonthsPlus']['adults']['males']['disaggregatedByAge']['50+']+$data['stopped']['adults']['males']['disaggregatedByAge']['50+']+$data['died']['adults']['males']['disaggregatedByAge']['50+']+$data['transferredOut']['adults']['males']['disaggregatedByAge']['50+']}}</th>
+        <th>{{$data['everRegistared']['adults']['males']['disaggregatedByAge']['50+']}}</th>
     </tr>
 
     <tr>
@@ -171,7 +171,7 @@
         <th>{{$data['stopped']['adults']['females']['count']}}</th>
         <th>{{$data['died']['adults']['females']['count']}}</th>
         <th>{{$data['transferredOut']['adults']['females']['count']}}</th>
-        <th>{{$data['txCurrent']['adults']['females']['count']+$data['defaulted1Month']['adults']['females']['count']+$data['defaulted2Months']['adults']['females']['count']+$data['defaulted3MonthsPlus']['adults']['females']['count']+$data['stopped']['adults']['females']['count']+$data['died']['adults']['females']['count']+$data['transferredOut']['adults']['females']['count']}}</th>
+        <th>{{$data['everRegistared']['adults']['females']['count']}}</th>
     </tr>
     <tr>
         <th></th>
@@ -183,7 +183,7 @@
         <th>{{$data['stopped']['adults']['females']['disaggregatedByAge']['15-19']}}</th>
         <th>{{$data['died']['adults']['females']['disaggregatedByAge']['15-19']}}</th>
         <th>{{$data['transferredOut']['adults']['females']['disaggregatedByAge']['15-19']}}</th>
-        <th>{{$data['txCurrent']['adults']['females']['disaggregatedByAge']['15-19']+$data['defaulted1Month']['adults']['females']['disaggregatedByAge']['15-19']+$data['defaulted2Months']['adults']['females']['disaggregatedByAge']['15-19']+$data['defaulted3MonthsPlus']['adults']['females']['disaggregatedByAge']['15-19']+$data['stopped']['adults']['females']['disaggregatedByAge']['15-19']+$data['died']['adults']['females']['disaggregatedByAge']['15-19']+$data['transferredOut']['adults']['females']['disaggregatedByAge']['15-19']}}</th>
+        <th>{{$data['everRegistared']['adults']['females']['disaggregatedByAge']['15-19']}}</th>
     </tr>
     <tr>
         <th></th>
@@ -195,7 +195,7 @@
         <th>{{$data['stopped']['adults']['females']['disaggregatedByAge']['20-24']}}</th>
         <th>{{$data['died']['adults']['females']['disaggregatedByAge']['20-24']}}</th>
         <th>{{$data['transferredOut']['adults']['females']['disaggregatedByAge']['20-24']}}</th>
-        <th>{{$data['txCurrent']['adults']['females']['disaggregatedByAge']['20-24']+$data['defaulted1Month']['adults']['females']['disaggregatedByAge']['20-24']+$data['defaulted2Months']['adults']['females']['disaggregatedByAge']['20-24']+$data['defaulted3MonthsPlus']['adults']['females']['disaggregatedByAge']['20-24']+$data['stopped']['adults']['females']['disaggregatedByAge']['20-24']+$data['died']['adults']['females']['disaggregatedByAge']['20-24']+$data['transferredOut']['adults']['females']['disaggregatedByAge']['20-24']}}</th>
+        <th>{{$data['everRegistared']['adults']['females']['disaggregatedByAge']['20-24']}}</th>
     </tr>
     <tr>
         <th></th>
@@ -207,7 +207,7 @@
         <th>{{$data['stopped']['adults']['females']['disaggregatedByAge']['25-29']}}</th>
         <th>{{$data['died']['adults']['females']['disaggregatedByAge']['25-29']}}</th>
         <th>{{$data['transferredOut']['adults']['females']['disaggregatedByAge']['25-29']}}</th>
-        <th>{{$data['txCurrent']['adults']['females']['disaggregatedByAge']['25-29']+$data['defaulted1Month']['adults']['females']['disaggregatedByAge']['25-29']+$data['defaulted2Months']['adults']['females']['disaggregatedByAge']['25-29']+$data['defaulted3MonthsPlus']['adults']['females']['disaggregatedByAge']['25-29']+$data['stopped']['adults']['females']['disaggregatedByAge']['25-29']+$data['died']['adults']['females']['disaggregatedByAge']['25-29']+$data['transferredOut']['adults']['females']['disaggregatedByAge']['25-29']}}</th>
+        <th>{{$data['everRegistared']['adults']['females']['disaggregatedByAge']['25-29']}}</th>
     </tr>
 
     <tr>
@@ -220,7 +220,7 @@
         <th>{{$data['stopped']['adults']['females']['disaggregatedByAge']['30-34']}}</th>
         <th>{{$data['died']['adults']['females']['disaggregatedByAge']['30-34']}}</th>
         <th>{{$data['transferredOut']['adults']['females']['disaggregatedByAge']['30-34']}}</th>
-        <th>{{$data['txCurrent']['adults']['females']['disaggregatedByAge']['30-34']+$data['defaulted1Month']['adults']['females']['disaggregatedByAge']['30-34']+$data['defaulted2Months']['adults']['females']['disaggregatedByAge']['30-34']+$data['defaulted3MonthsPlus']['adults']['females']['disaggregatedByAge']['30-34']+$data['stopped']['adults']['females']['disaggregatedByAge']['30-34']+$data['died']['adults']['females']['disaggregatedByAge']['30-34']+$data['transferredOut']['adults']['females']['disaggregatedByAge']['30-34']}}</th>
+        <th>{{$data['everRegistared']['adults']['females']['disaggregatedByAge']['30-34']}}</th>
     </tr>
 
     <tr>
@@ -233,7 +233,7 @@
         <th>{{$data['stopped']['adults']['females']['disaggregatedByAge']['35-39']}}</th>
         <th>{{$data['died']['adults']['females']['disaggregatedByAge']['35-39']}}</th>
         <th>{{$data['transferredOut']['adults']['females']['disaggregatedByAge']['35-39']}}</th>
-        <th>{{$data['txCurrent']['adults']['females']['disaggregatedByAge']['35-39']+$data['defaulted1Month']['adults']['females']['disaggregatedByAge']['35-39']+$data['defaulted2Months']['adults']['females']['disaggregatedByAge']['35-39']+$data['defaulted3MonthsPlus']['adults']['females']['disaggregatedByAge']['35-39']+$data['stopped']['adults']['females']['disaggregatedByAge']['35-39']+$data['died']['adults']['females']['disaggregatedByAge']['35-39']+$data['transferredOut']['adults']['females']['disaggregatedByAge']['35-39']}}</th>
+        <th>{{$data['everRegistared']['adults']['females']['disaggregatedByAge']['35-39']}}</th>
     </tr>
 
     <tr>
@@ -246,7 +246,7 @@
         <th>{{$data['stopped']['adults']['females']['disaggregatedByAge']['40-44']}}</th>
         <th>{{$data['died']['adults']['females']['disaggregatedByAge']['40-44']}}</th>
         <th>{{$data['transferredOut']['adults']['females']['disaggregatedByAge']['40-44']}}</th>
-        <th>{{$data['txCurrent']['adults']['females']['disaggregatedByAge']['40-44']+$data['defaulted1Month']['adults']['females']['disaggregatedByAge']['40-44']+$data['defaulted2Months']['adults']['females']['disaggregatedByAge']['40-44']+$data['defaulted3MonthsPlus']['adults']['females']['disaggregatedByAge']['40-44']+$data['stopped']['adults']['females']['disaggregatedByAge']['40-44']+$data['died']['adults']['females']['disaggregatedByAge']['40-44']+$data['transferredOut']['adults']['females']['disaggregatedByAge']['40-44']}}</th>
+        <th>{{$data['everRegistared']['adults']['females']['disaggregatedByAge']['40-44']}}</th>
     </tr>
 
     <tr>
@@ -259,7 +259,7 @@
         <th>{{$data['stopped']['adults']['females']['disaggregatedByAge']['45-49']}}</th>
         <th>{{$data['died']['adults']['females']['disaggregatedByAge']['45-49']}}</th>
         <th>{{$data['transferredOut']['adults']['females']['disaggregatedByAge']['45-49']}}</th>
-        <th>{{$data['txCurrent']['adults']['females']['disaggregatedByAge']['45-49']+$data['defaulted1Month']['adults']['females']['disaggregatedByAge']['45-49']+$data['defaulted2Months']['adults']['females']['disaggregatedByAge']['45-49']+$data['defaulted3MonthsPlus']['adults']['females']['disaggregatedByAge']['45-49']+$data['stopped']['adults']['females']['disaggregatedByAge']['45-49']+$data['died']['adults']['females']['disaggregatedByAge']['45-49']+$data['transferredOut']['adults']['females']['disaggregatedByAge']['45-49']}}</th>
+        <th>{{$data['everRegistared']['adults']['females']['disaggregatedByAge']['45-49']}}</th>
     </tr>
     <tr>
         <th></th>
@@ -271,7 +271,7 @@
         <th>{{$data['stopped']['adults']['females']['disaggregatedByAge']['50+']}}</th>
         <th>{{$data['died']['adults']['females']['disaggregatedByAge']['50+']}}</th>
         <th>{{$data['transferredOut']['adults']['females']['disaggregatedByAge']['50+']}}</th>
-        <th>{{$data['txCurrent']['adults']['females']['disaggregatedByAge']['50+']+$data['defaulted1Month']['adults']['females']['disaggregatedByAge']['50+']+$data['defaulted2Months']['adults']['females']['disaggregatedByAge']['50+']+$data['defaulted3MonthsPlus']['adults']['females']['disaggregatedByAge']['50+']+$data['stopped']['adults']['females']['disaggregatedByAge']['50+']+$data['died']['adults']['females']['disaggregatedByAge']['50+']+$data['transferredOut']['adults']['females']['disaggregatedByAge']['50+']}}</th>
+        <th>{{$data['everRegistared']['adults']['females']['disaggregatedByAge']['50+']}}</th>
     </tr>
 
     <tr>
@@ -284,7 +284,7 @@
         <th>{{$data['stopped']['pediatrics']['count']}}</th>
         <th>{{$data['died']['pediatrics']['count']}}</th>
         <th>{{$data['transferredOut']['pediatrics']['count']}}</th>
-        <th>{{$data['txCurrent']['pediatrics']['count']+$data['defaulted1Month']['pediatrics']['count']+$data['defaulted2Months']['pediatrics']['count']+$data['defaulted3MonthsPlus']['pediatrics']['count']+$data['stopped']['pediatrics']['count']+$data['died']['pediatrics']['count']+$data['transferredOut']['pediatrics']['count']}}</th>
+        <th>{{$data['everRegistared']['pediatrics']['count']}}</th>
     </tr>
     <tr>
         <th>Males</th>
@@ -296,7 +296,7 @@
         <th>{{$data['stopped']['pediatrics']['males']['count']}}</th>
         <th>{{$data['died']['pediatrics']['males']['count']}}</th>
         <th>{{$data['transferredOut']['pediatrics']['males']['count']}}</th>
-        <th>{{$data['txCurrent']['pediatrics']['males']['count']+$data['defaulted1Month']['pediatrics']['males']['count']+$data['defaulted2Months']['pediatrics']['males']['count']+$data['defaulted3MonthsPlus']['pediatrics']['males']['count']+$data['stopped']['pediatrics']['males']['count']+$data['died']['pediatrics']['males']['count']+$data['transferredOut']['pediatrics']['males']['count']}}</th>
+        <th>{{$data['everRegistared']['pediatrics']['males']['count']}}</th>
     </tr>
     <tr>
         <th></th>
@@ -308,7 +308,7 @@
         <th>{{$data['stopped']['pediatrics']['males']['disaggregatedByAge']['<1']}}</th>
         <th>{{$data['died']['pediatrics']['males']['disaggregatedByAge']['<1']}}</th>
         <th>{{$data['transferredOut']['pediatrics']['males']['disaggregatedByAge']['<1']}}</th>
-        <th>{{$data['txCurrent']['pediatrics']['males']['disaggregatedByAge']['<1']+$data['defaulted1Month']['pediatrics']['males']['disaggregatedByAge']['<1']+$data['defaulted2Months']['pediatrics']['males']['disaggregatedByAge']['<1']+$data['defaulted3MonthsPlus']['pediatrics']['males']['disaggregatedByAge']['<1']+$data['stopped']['pediatrics']['males']['disaggregatedByAge']['<1']+$data['died']['pediatrics']['males']['disaggregatedByAge']['<1']+$data['transferredOut']['pediatrics']['males']['disaggregatedByAge']['<1']}}</th>
+        <th>{{$data['everRegistared']['pediatrics']['males']['disaggregatedByAge']['<1']}}</th>
     </tr>
     <tr>
         <th></th>
@@ -320,7 +320,7 @@
         <th>{{$data['stopped']['pediatrics']['males']['disaggregatedByAge']['1-4']}}</th>
         <th>{{$data['died']['pediatrics']['males']['disaggregatedByAge']['1-4']}}</th>
         <th>{{$data['transferredOut']['pediatrics']['males']['disaggregatedByAge']['1-4']}}</th>
-        <th>{{$data['txCurrent']['pediatrics']['males']['disaggregatedByAge']['1-4']+$data['defaulted1Month']['pediatrics']['males']['disaggregatedByAge']['1-4']+$data['defaulted2Months']['pediatrics']['males']['disaggregatedByAge']['1-4']+$data['defaulted3MonthsPlus']['pediatrics']['males']['disaggregatedByAge']['1-4']+$data['stopped']['pediatrics']['males']['disaggregatedByAge']['1-4']+$data['died']['pediatrics']['males']['disaggregatedByAge']['1-4']+$data['transferredOut']['pediatrics']['males']['disaggregatedByAge']['1-4']}}</th>
+        <th>{{$data['everRegistared']['pediatrics']['males']['disaggregatedByAge']['1-4']}}</th>
     </tr>
     <tr>
         <th></th>
@@ -332,7 +332,7 @@
         <th>{{$data['stopped']['pediatrics']['males']['disaggregatedByAge']['5-9']}}</th>
         <th>{{$data['died']['pediatrics']['males']['disaggregatedByAge']['5-9']}}</th>
         <th>{{$data['transferredOut']['pediatrics']['males']['disaggregatedByAge']['5-9']}}</th>
-        <th>{{$data['txCurrent']['pediatrics']['males']['disaggregatedByAge']['5-9']+$data['defaulted1Month']['pediatrics']['males']['disaggregatedByAge']['5-9']+$data['defaulted2Months']['pediatrics']['males']['disaggregatedByAge']['5-9']+$data['defaulted3MonthsPlus']['pediatrics']['males']['disaggregatedByAge']['5-9']+$data['stopped']['pediatrics']['males']['disaggregatedByAge']['5-9']+$data['died']['pediatrics']['males']['disaggregatedByAge']['5-9']+$data['transferredOut']['pediatrics']['males']['disaggregatedByAge']['5-9']}}</th>
+        <th>{{$data['everRegistared']['pediatrics']['males']['disaggregatedByAge']['5-9']}}</th>
     </tr>
 
     <tr>
@@ -345,7 +345,7 @@
         <th>{{$data['stopped']['pediatrics']['males']['disaggregatedByAge']['10-14']}}</th>
         <th>{{$data['died']['pediatrics']['males']['disaggregatedByAge']['10-14']}}</th>
         <th>{{$data['transferredOut']['pediatrics']['males']['disaggregatedByAge']['10-14']}}</th>
-        <th>{{$data['txCurrent']['pediatrics']['males']['disaggregatedByAge']['10-14']+$data['defaulted1Month']['pediatrics']['males']['disaggregatedByAge']['10-14']+$data['defaulted2Months']['pediatrics']['males']['disaggregatedByAge']['10-14']+$data['defaulted3MonthsPlus']['pediatrics']['males']['disaggregatedByAge']['10-14']+$data['stopped']['pediatrics']['males']['disaggregatedByAge']['10-14']+$data['died']['pediatrics']['males']['disaggregatedByAge']['10-14']+$data['transferredOut']['pediatrics']['males']['disaggregatedByAge']['10-14']}}</th>
+        <th>{{$data['everRegistared']['pediatrics']['males']['disaggregatedByAge']['10-14']}}</th>
     </tr>
 
     <tr>
@@ -358,7 +358,7 @@
         <th>{{$data['stopped']['pediatrics']['females']['count']}}</th>
         <th>{{$data['died']['pediatrics']['females']['count']}}</th>
         <th>{{$data['transferredOut']['pediatrics']['females']['count']}}</th>
-        <th>{{$data['txCurrent']['pediatrics']['females']['count']+$data['defaulted1Month']['pediatrics']['females']['count']+$data['defaulted2Months']['pediatrics']['females']['count']+$data['defaulted3MonthsPlus']['pediatrics']['females']['count']+$data['stopped']['pediatrics']['females']['count']+$data['died']['pediatrics']['females']['count']+$data['transferredOut']['pediatrics']['females']['count']}}</th>
+        <th>{{$data['everRegistared']['pediatrics']['females']['count']}}</th>
     </tr>
     <tr>
         <th></th>
@@ -370,7 +370,7 @@
         <th>{{$data['stopped']['pediatrics']['females']['disaggregatedByAge']['<1']}}</th>
         <th>{{$data['died']['pediatrics']['females']['disaggregatedByAge']['<1']}}</th>
         <th>{{$data['transferredOut']['pediatrics']['females']['disaggregatedByAge']['<1']}}</th>
-        <th>{{$data['txCurrent']['pediatrics']['females']['disaggregatedByAge']['<1']+$data['defaulted1Month']['pediatrics']['females']['disaggregatedByAge']['<1']+$data['defaulted2Months']['pediatrics']['females']['disaggregatedByAge']['<1']+$data['defaulted3MonthsPlus']['pediatrics']['females']['disaggregatedByAge']['<1']+$data['stopped']['pediatrics']['females']['disaggregatedByAge']['<1']+$data['died']['pediatrics']['females']['disaggregatedByAge']['<1']+$data['transferredOut']['pediatrics']['females']['disaggregatedByAge']['<1']}}</th>
+        <th>{{$data['everRegistared']['pediatrics']['females']['disaggregatedByAge']['<1']}}</th>
     </tr>
     <tr>
         <th></th>
@@ -382,7 +382,7 @@
         <th>{{$data['stopped']['pediatrics']['females']['disaggregatedByAge']['1-4']}}</th>
         <th>{{$data['died']['pediatrics']['females']['disaggregatedByAge']['1-4']}}</th>
         <th>{{$data['transferredOut']['pediatrics']['females']['disaggregatedByAge']['1-4']}}</th>
-        <th>{{$data['txCurrent']['pediatrics']['females']['disaggregatedByAge']['1-4']+$data['defaulted1Month']['pediatrics']['females']['disaggregatedByAge']['1-4']+$data['defaulted2Months']['pediatrics']['females']['disaggregatedByAge']['1-4']+$data['defaulted3MonthsPlus']['pediatrics']['females']['disaggregatedByAge']['1-4']+$data['stopped']['pediatrics']['females']['disaggregatedByAge']['1-4']+$data['died']['pediatrics']['females']['disaggregatedByAge']['1-4']+$data['transferredOut']['pediatrics']['females']['disaggregatedByAge']['1-4']}}</th>
+        <th>{{$data['everRegistared']['pediatrics']['females']['disaggregatedByAge']['1-4']}}</th>
     </tr>
     <tr>
         <th></th>
@@ -394,7 +394,7 @@
         <th>{{$data['stopped']['pediatrics']['females']['disaggregatedByAge']['5-9']}}</th>
         <th>{{$data['died']['pediatrics']['females']['disaggregatedByAge']['5-9']}}</th>
         <th>{{$data['transferredOut']['pediatrics']['females']['disaggregatedByAge']['5-9']}}</th>
-        <th>{{$data['txCurrent']['pediatrics']['females']['disaggregatedByAge']['5-9']+$data['defaulted1Month']['pediatrics']['females']['disaggregatedByAge']['5-9']+$data['defaulted2Months']['pediatrics']['males']['disaggregatedByAge']['5-9']+$data['defaulted3MonthsPlus']['pediatrics']['females']['disaggregatedByAge']['5-9']+$data['stopped']['pediatrics']['females']['disaggregatedByAge']['5-9']+$data['died']['pediatrics']['females']['disaggregatedByAge']['5-9']+$data['transferredOut']['pediatrics']['females']['disaggregatedByAge']['5-9']}}</th>
+        <th>{{$data['everRegistared']['pediatrics']['females']['disaggregatedByAge']['5-9']}}</th>
     </tr>
 
     <tr>
@@ -407,7 +407,7 @@
         <th>{{$data['stopped']['pediatrics']['females']['disaggregatedByAge']['10-14']}}</th>
         <th>{{$data['died']['pediatrics']['females']['disaggregatedByAge']['10-14']}}</th>
         <th>{{$data['transferredOut']['pediatrics']['females']['disaggregatedByAge']['10-14']}}</th>
-        <th>{{$data['txCurrent']['pediatrics']['females']['disaggregatedByAge']['10-14']+$data['defaulted1Month']['pediatrics']['females']['disaggregatedByAge']['10-14']+$data['defaulted2Months']['pediatrics']['females']['disaggregatedByAge']['10-14']+$data['defaulted3MonthsPlus']['pediatrics']['females']['disaggregatedByAge']['10-14']+$data['stopped']['pediatrics']['females']['disaggregatedByAge']['10-14']+$data['died']['pediatrics']['females']['disaggregatedByAge']['10-14']+$data['transferredOut']['pediatrics']['females']['disaggregatedByAge']['10-14']}}</th>
+        <th>{{$data['everRegistared']['pediatrics']['females']['disaggregatedByAge']['10-14']}}</th>
     </tr>
     <tr>
         <th>Unknown Age</th>
@@ -419,7 +419,7 @@
         <th>{{$data['stopped']['unknownAge']['count']}}</th>
         <th>{{$data['died']['unknownAge']['count']}}</th>
         <th>{{$data['transferredOut']['unknownAge']['count']}}</th>
-        <th>{{$data['txCurrent']['unknownAge']['count']+$data['defaulted1Month']['unknownAge']['count']+$data['defaulted2Months']['unknownAge']['count']+$data['defaulted3MonthsPlus']['unknownAge']['count']+$data['stopped']['unknownAge']['count']+$data['died']['unknownAge']['count']+$data['transferredOut']['unknownAge']['count']}}</th>
+        <th>{{$data['everRegistared']['unknownAge']['count']}}</th>
     </tr>
     <tr>
         <th>Males</th>
@@ -431,7 +431,7 @@
         <th>{{$data['stopped']['unknownAge']['males']}}</th>
         <th>{{$data['died']['unknownAge']['males']}}</th>
         <th>{{$data['transferredOut']['unknownAge']['males']}}</th>
-        <th>{{$data['txCurrent']['unknownAge']['males']+$data['defaulted1Month']['unknownAge']['males']+$data['defaulted2Months']['unknownAge']['males']+$data['defaulted3MonthsPlus']['unknownAge']['males']+$data['stopped']['unknownAge']['males']+$data['died']['unknownAge']['males']+$data['transferredOut']['unknownAge']['males']}}</th>
+        <th>{{$data['everRegistared']['unknownAge']['males']}}</th>
     </tr>
     <tr>
         <th>Females</th>
@@ -443,7 +443,7 @@
         <th>{{$data['stopped']['unknownAge']['females']}}</th>
         <th>{{$data['died']['unknownAge']['females']}}</th>
         <th>{{$data['transferredOut']['unknownAge']['females']}}</th>
-        <th>{{$data['txCurrent']['unknownAge']['females']+$data['defaulted1Month']['unknownAge']['females']+$data['defaulted2Months']['unknownAge']['females']+$data['defaulted3MonthsPlus']['unknownAge']['females']+$data['stopped']['unknownAge']['females']+$data['died']['unknownAge']['females']+$data['transferredOut']['unknownAge']['females']}}</th>
+        <th>{{$data['everRegistared']['unknownAge']['females']}}</th>
     </tr>
     </tbody>
 </table>
